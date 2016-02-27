@@ -36,11 +36,11 @@ public class FlushRanking extends PokerHandRanking {
 	
 	public static Ordering<FlushRanking> ordering() {
 		return Ordering.compound(ImmutableList.of(
-				Comparator.comparing(f -> f.firstValue),
-				Comparator.comparing(f -> f.secondValue),
-				Comparator.comparing(f -> f.thirdValue),
-				Comparator.comparing(f -> f.fourthValue),
-				Comparator.comparing(f -> f.fifthValue)
+				Comparator.comparing((FlushRanking f) -> f.firstValue),
+				Comparator.comparing((FlushRanking f) -> f.secondValue),
+				Comparator.comparing((FlushRanking f) -> f.thirdValue),
+				Comparator.comparing((FlushRanking f) -> f.fourthValue),
+				Comparator.comparing((FlushRanking f) -> f.fifthValue)
 		));
 	}
 
