@@ -6,7 +6,7 @@ import com.google.common.collect.Ordering;
 
 import apostov.Card;
 
-public class TwoPairsRanking extends PokerHandRanking {
+public class TwoPairsRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
 
 	public final Card firstCardOfHighestPair;
 	public final Card secondCardOfHighestPair;
@@ -35,5 +35,11 @@ public class TwoPairsRanking extends PokerHandRanking {
 				.thenComparing((TwoPairsRanking tp) -> tp.firstCardOfLowestPair.value)
 				.thenComparing((TwoPairsRanking tp) -> tp.kicker.value)
 		);
+	}
+	
+	@Override
+	public int compareTo(final PokerHandRanking o) {
+		final TwoPairsRanking other = (TwoPairsRanking) o;
+		return ordering().compare(this, other);
 	}
 }

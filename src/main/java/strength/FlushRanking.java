@@ -43,4 +43,10 @@ public class FlushRanking extends PokerHandRanking {
 				Comparator.comparing(f -> f.fifthValue)
 		));
 	}
+
+	@Override
+	public int compareTo(final PokerHandRanking o) {
+		final FlushRanking other = (FlushRanking) o;
+		return ordering().compare(this, other);
+	}
 }

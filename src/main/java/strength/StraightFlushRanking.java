@@ -5,7 +5,7 @@ import com.google.common.collect.Ordering;
 import apostov.Suit;
 import apostov.Value;
 
-public class StraightFlushRanking extends PokerHandRanking  {
+public class StraightFlushRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
 	
 	public final Value highestCardValue;
 	public final Suit suit;
@@ -18,5 +18,11 @@ public class StraightFlushRanking extends PokerHandRanking  {
 	
 	public static Ordering<StraightFlushRanking> ordering() {
 		return Ordering.natural().onResultOf(r -> r.highestCardValue);
+	}
+	
+	@Override
+	public int compareTo(final PokerHandRanking o) {
+		final StraightFlushRanking other = (StraightFlushRanking) o;
+		return ordering().compare(this, other);
 	}
 }

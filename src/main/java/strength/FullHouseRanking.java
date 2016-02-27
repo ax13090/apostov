@@ -8,7 +8,7 @@ import com.google.common.collect.Ordering;
 import apostov.Card;
 import apostov.Value;
 
-public class FullHouseRanking extends PokerHandRanking {
+public class FullHouseRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
 
 	public final Card firstSetCard;
 	public final Card secondSetCard;
@@ -54,5 +54,11 @@ public class FullHouseRanking extends PokerHandRanking {
 		return Ordering.from(
 				Comparator.comparing(FullHouseRanking::valueOfTheSet)
 				.thenComparing(FullHouseRanking::valueOfThePair));
+	}
+
+	@Override
+	public int compareTo(final PokerHandRanking o) {
+		final FullHouseRanking other = (FullHouseRanking) o;
+		return ordering().compare(this, other);
 	}
 }

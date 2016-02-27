@@ -1,6 +1,9 @@
 package strength;
 
-public abstract class PokerHandRanking {
+/**
+ * 
+ */
+public abstract class PokerHandRanking implements Comparable<PokerHandRanking> {
 
 	public final PokerHandKind handKind;
 
