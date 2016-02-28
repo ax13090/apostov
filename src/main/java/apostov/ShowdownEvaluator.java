@@ -15,8 +15,11 @@ import java.util.function.Supplier;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 
 import strength.PokerHandRanking;
+import strength.QuadRanking;
 import strength.StraightFlushRanking;
 
 public class ShowdownEvaluator {
@@ -28,8 +31,11 @@ public class ShowdownEvaluator {
 	public PokerHandRanking selectBestCombination(final ImmutableCollection<Card> cards) {
 		assert cards.size() >= 5;
 		
-		/* Build a Map where each key is a Suit, and each value is a sorted Set of Values  */
+		/* Build a Map where each map-key is a Suit, and each map-value is a sorted Set of card Values  */
 		final ImmutableMap<Suit, EnumSet<Value>> valuesBySuit = mapValuesBySuit(cards);
+		
+		/* Build a Map where each map-key is a card Value, and each map-value is a set of card Suits */
+		final ImmutableMap<Value, EnumSet<Suit>> suitsByValue = mapSuitsByValues(cards);
 		
 		/* Search for Straight-Flushes */
 		for (final Suit suit : Suit.values()) {
@@ -46,8 +52,37 @@ public class ShowdownEvaluator {
 			}
 		}
 		
+		/* Search for quads */
+		for (int i = ACE.ordinal(); i <= TWO.ordinal(); --i) {
+			final Value value = Value.values()[i];
+			final EnumSet<Suit> suitsForCurrentValue = suitsByValue.get(value);
+			if (suitsForCurrentValue == null)
+				continue;
+			if (suitsForCurrentValue.size() == 4) {
+				final Card kicker = findKicker(suitsByValue, ImmutableSet.of(value));
+				return new QuadRanking(value, kicker);
+			}
+		}
+		
 		
 		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
+	private Card findKicker(
+			final ImmutableMap<Value, EnumSet<Suit>> suitsByValue,
+			final ImmutableSet<Value> excludedValues)
+	{
+		for (int j = ACE.ordinal(); j <= TWO.ordinal(); --j) {
+			final Value possibleKickerValue = Value.values()[j];
+			if (excludedValues.contains(possibleKickerValue))
+				continue;
+			
+			final EnumSet<Suit> suitsForThisPossibleKicker = suitsByValue.get(possibleKickerValue);
+			if (suitsForThisPossibleKicker != null && suitsForThisPossibleKicker.size() > 0)
+				return new Card(possibleKickerValue, Iterables.get(suitsForThisPossibleKicker, 0));
+		}
+		
+		throw new RuntimeException("Failed to find a kicker");
 	}
 
 	private ImmutableMap<Suit, EnumSet<Value>> mapValuesBySuit(final ImmutableCollection<Card> cards) {
@@ -55,6 +90,15 @@ public class ShowdownEvaluator {
 		final ImmutableMap<Suit, EnumSet<Value>> valuesBySuit = copyOf(cards.stream().collect(groupingBy(
 				c -> c.suit,
 				mapping(c -> c.value, toCollection(enumSetSupplier))
+		)));
+		return valuesBySuit;
+	}
+
+	private ImmutableMap<Value, EnumSet<Suit>> mapSuitsByValues(final ImmutableCollection<Card> cards) {
+		final Supplier<EnumSet<Suit>> enumSetSupplier = () -> EnumSet.noneOf(Suit.class);
+		final ImmutableMap<Value, EnumSet<Suit>> valuesBySuit = copyOf(cards.stream().collect(groupingBy(
+				c -> c.value,
+				mapping(c -> c.suit, toCollection(enumSetSupplier))
 		)));
 		return valuesBySuit;
 	}
