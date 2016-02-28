@@ -38,7 +38,9 @@ public class ShowdownEvaluator {
 		/* Build a Map where each map-key is a card Value, and each map-value is a set of card Suits */
 		final ImmutableMap<Value, EnumSet<Suit>> suitsByValue = mapSuitsByValues(cards);
 		
-		/* Search for Straight-Flushes */
+		/* Search for Straight-Flushes
+		 * This works by assuming that there can not be two straight-flushes
+		 * in different suits, which is true for Texas Holdem. */
 		for (final Suit suit : Suit.values()) {
 			final EnumSet<Value> mutableValues = valuesBySuit.get(suit);
 			if (mutableValues == null)
