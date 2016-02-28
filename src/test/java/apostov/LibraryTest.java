@@ -1,9 +1,7 @@
 package apostov;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
-
-import apostov.Library;
-
-import static org.junit.Assert.*;
 
 public class LibraryTest {
 	@Test
