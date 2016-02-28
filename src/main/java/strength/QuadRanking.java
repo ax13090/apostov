@@ -7,7 +7,7 @@ import com.google.common.collect.Ordering;
 import apostov.Card;
 import apostov.Value;
 
-public class QuadRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
+public class QuadRanking extends PokerHandRanking {
 
 	public final Value value;
 	public final Card kicker;

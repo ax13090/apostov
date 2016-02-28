@@ -8,7 +8,7 @@ import apostov.Card;
 import apostov.Suit;
 import apostov.Value;
 
-public class SetRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
+public class SetRanking extends PokerHandRanking {
 	
 	public final Value valueOfTheSet;
 	public final Suit firstSuit;

@@ -8,7 +8,7 @@ import com.google.common.collect.Ordering;
 import apostov.Card;
 import apostov.Value;
 
-public class FullHouseRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
+public class FullHouseRanking extends PokerHandRanking {
 
 	public final Card firstSetCard;
 	public final Card secondSetCard;

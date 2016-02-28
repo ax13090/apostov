@@ -6,7 +6,7 @@ import com.google.common.collect.Ordering;
 
 import apostov.Card;
 
-public class HighCardRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
+public class HighCardRanking extends PokerHandRanking {
 
 	public final Card highestCard;
 	public final Card secondHighestCard;

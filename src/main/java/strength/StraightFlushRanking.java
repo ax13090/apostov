@@ -5,7 +5,7 @@ import com.google.common.collect.Ordering;
 import apostov.Suit;
 import apostov.Value;
 
-public class StraightFlushRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
+public class StraightFlushRanking extends PokerHandRanking {
 	
 	public final Value highestCardValue;
 	public final Suit suit;

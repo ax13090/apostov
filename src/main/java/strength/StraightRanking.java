@@ -12,7 +12,7 @@ import com.google.common.collect.Ordering;
 import apostov.Card;
 import apostov.Value;
 
-public class StraightRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
+public class StraightRanking extends PokerHandRanking {
 
 	public final Card highestCard;
 	public final Card secondHighestCard;
