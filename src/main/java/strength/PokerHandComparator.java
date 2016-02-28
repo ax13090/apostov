@@ -4,8 +4,9 @@ import java.util.Comparator;
 
 import com.google.common.collect.Ordering;
 
-public class PokerHandComparator extends Ordering<PokerHandRanking> {
+public class PokerHandComparator extends Ordering<PokerHandRanking<?>> {
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public int compare(final PokerHandRanking h1, final PokerHandRanking h2) {
 

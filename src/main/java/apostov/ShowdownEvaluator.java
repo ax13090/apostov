@@ -11,7 +11,7 @@ public class ShowdownEvaluator {
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
-	public PokerHandRanking selectBestCombination(final ImmutableCollection<Card> cards) {
+	public PokerHandRanking<?> selectBestCombination(final ImmutableCollection<Card> cards) {
 		assert cards.size() >= 5;
 		throw new UnsupportedOperationException("Not implemented yet");
 	}

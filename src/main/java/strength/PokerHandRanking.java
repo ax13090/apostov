@@ -8,7 +8,7 @@ package strength;
  * But if o1 is an instance of PairRanking and o2 is an instance
  * of StraightRanking, then o1.compareTo(o2) will throw a ClassCastException. 
  */
-public abstract class PokerHandRanking implements Comparable<PokerHandRanking> {
+public abstract class PokerHandRanking<S extends PokerHandRanking<?>> implements Comparable<S> {
 
 	public final PokerHandKind handKind;
 

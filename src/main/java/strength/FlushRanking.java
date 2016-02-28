@@ -8,7 +8,7 @@ import com.google.common.collect.Ordering;
 import apostov.Suit;
 import apostov.Value;
 
-public class FlushRanking extends PokerHandRanking {
+public class FlushRanking extends PokerHandRanking<FlushRanking> {
 	
 	public final Suit suit;
 	public final Value firstValue;
@@ -45,8 +45,7 @@ public class FlushRanking extends PokerHandRanking {
 	}
 
 	@Override
-	public int compareTo(final PokerHandRanking o) {
-		final FlushRanking other = (FlushRanking) o;
+	public int compareTo(final FlushRanking other) {
 		return ordering().compare(this, other);
 	}
 }

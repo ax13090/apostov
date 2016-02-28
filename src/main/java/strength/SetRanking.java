@@ -8,7 +8,7 @@ import apostov.Card;
 import apostov.Suit;
 import apostov.Value;
 
-public class SetRanking extends PokerHandRanking implements Comparable<PokerHandRanking> {
+public class SetRanking extends PokerHandRanking<SetRanking> {
 	
 	public final Value valueOfTheSet;
 	public final Suit firstSuit;
@@ -43,8 +43,7 @@ public class SetRanking extends PokerHandRanking implements Comparable<PokerHand
 	}
 
 	@Override
-	public int compareTo(final PokerHandRanking o) {
-		final SetRanking other = (SetRanking) o;
+	public int compareTo(final SetRanking other) {
 		return ordering().compare(this, other);
 	}
 }
