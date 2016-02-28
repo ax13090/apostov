@@ -177,7 +177,7 @@ public class ShowdownEvaluator {
 
 	private Optional<Value> searchFiveConsecutiveValues(final Set<Value> values) {
 		if (values.size() < 5)
-			return Optional.empty();
+			throw new RuntimeException("Programming error: trying to find a straight with less than five card values");
 		
 		int consecutiveCardsCount = 0;
 		for (int i = ACE.ordinal(); i >= TWO.ordinal(); --i) {
