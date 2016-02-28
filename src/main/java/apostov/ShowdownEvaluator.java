@@ -8,6 +8,7 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toCollection;
 
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -88,13 +89,21 @@ public class ShowdownEvaluator {
 					continue;
 				assert suitsForPossiblePairValue.size() < 3;
 				
-				if (suitsForPossiblePairValue.size() == 2)
-					return new FullHouseRanking(
-							new Card(possibleSetValue, Iterables.get(suitsForPossibleSetValue, 0)),
-							new Card(possibleSetValue, Iterables.get(suitsForPossibleSetValue, 1)),
-							new Card(possibleSetValue, Iterables.get(suitsForPossibleSetValue, 2)),
-							new Card(possiblePairValue, Iterables.get(suitsForPossiblePairValue, 0)),
-							new Card(possiblePairValue, Iterables.get(suitsForPossiblePairValue, 1)));
+				if (suitsForPossiblePairValue.size() == 2) {
+					final Iterator<Suit> setSuits = suitsForPossibleSetValue.iterator();
+					final Iterator<Suit> pairSuits = suitsForPossiblePairValue.iterator();
+					final FullHouseRanking fullHouseRanking = new FullHouseRanking(
+							new Card(possibleSetValue, setSuits.next()),
+							new Card(possibleSetValue, setSuits.next()),
+							new Card(possibleSetValue, setSuits.next()),
+							new Card(possiblePairValue, pairSuits.next()),
+							new Card(possiblePairValue, pairSuits.next()));
+					assert !setSuits.hasNext();
+					assert !pairSuits.hasNext();
+					
+					return fullHouseRanking;
+				}
+			}
 			}
 		}
 		
