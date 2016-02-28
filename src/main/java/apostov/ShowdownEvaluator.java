@@ -2,6 +2,7 @@ package apostov;
 
 import static apostov.Value.ACE;
 import static apostov.Value.TWO;
+import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.ImmutableMap.copyOf;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
@@ -19,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
+import strength.FlushRanking;
 import strength.FullHouseRanking;
 import strength.PokerHandRanking;
 import strength.QuadRanking;
@@ -104,7 +106,35 @@ public class ShowdownEvaluator {
 					return fullHouseRanking;
 				}
 			}
-			}
+		}
+		
+		/* Search for flushes
+		 * This works by assuming that there can not be two flushes
+		 * in different suits, which is true for Texas Holdem. */
+		for (final Suit suit : Suit.values()) {
+			final EnumSet<Value> mutableValues = valuesBySuit.get(suit);
+			if (mutableValues == null)
+				continue;
+			if (mutableValues.size() < 5)
+				continue;
+			
+			final ImmutableList<Value> flushValues = copyOf(
+					copyOf(Value.values())
+					.reverse()
+					.stream()
+					.filter(v -> mutableValues.contains(v))
+					.limit(5)
+					.iterator()
+			);
+			assert flushValues.size() == 5;
+			
+			return new FlushRanking(
+					suit, 
+					flushValues.get(0),
+					flushValues.get(1),
+					flushValues.get(2),
+					flushValues.get(3),
+					flushValues.get(4));
 		}
 		
 		throw new UnsupportedOperationException("Not implemented yet");
