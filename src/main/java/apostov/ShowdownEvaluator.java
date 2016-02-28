@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
@@ -25,6 +27,7 @@ import strength.FullHouseRanking;
 import strength.PokerHandRanking;
 import strength.QuadRanking;
 import strength.StraightFlushRanking;
+import strength.StraightRanking;
 
 public class ShowdownEvaluator {
 
@@ -135,6 +138,48 @@ public class ShowdownEvaluator {
 					flushValues.get(2),
 					flushValues.get(3),
 					flushValues.get(4));
+		}
+		
+		/* Search for Straights */
+		final EnumSet<Value> allValues = cards
+			.stream()
+			.map(c -> c.value)
+			.collect(Collectors.toCollection(() -> EnumSet.noneOf(Value.class)));
+		final Optional<Value> optionalStraightStrength = searchFiveConsecutiveValues(allValues);
+		if (optionalStraightStrength.isPresent()) {
+			final Value straightTopValue = optionalStraightStrength.get();
+			final Value secondHighestCardValue = Value.values()[straightTopValue.ordinal() - 1];
+			final Value middleCardValue = Value.values()[straightTopValue.ordinal() - 2];
+			final Value fourthCardValue = Value.values()[straightTopValue.ordinal() - 3];
+			final Value bottomCardValue = Value.values()[straightTopValue.ordinal() - 4];
+			
+			final Card highestCard = new Card(
+					straightTopValue,
+					Iterables.get(suitsByValue.get(straightTopValue), 0));
+			
+			final Card secondHighestCard = new Card(
+					secondHighestCardValue,
+					Iterables.get(suitsByValue.get(secondHighestCardValue), 0)
+			);
+			final Card middleCard = new Card(
+					middleCardValue,
+					Iterables.get(suitsByValue.get(middleCardValue), 0)
+			);
+			final Card fourthCard = new Card(
+					fourthCardValue,
+					Iterables.get(suitsByValue.get(fourthCardValue), 0)
+			);
+			final Card bottomCard = new Card(
+					bottomCardValue,
+					Iterables.get(suitsByValue.get(bottomCardValue), 0)
+			);
+			
+			return StraightRanking.create(
+					highestCard,
+					secondHighestCard,
+					middleCard,
+					fourthCard,
+					bottomCard);
 		}
 		
 		throw new UnsupportedOperationException("Not implemented yet");
