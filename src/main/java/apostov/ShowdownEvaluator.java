@@ -8,12 +8,13 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toCollection;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableCollection;
@@ -24,10 +25,14 @@ import com.google.common.collect.Iterables;
 
 import strength.FlushRanking;
 import strength.FullHouseRanking;
+import strength.HighCardRanking;
+import strength.PairRanking;
 import strength.PokerHandRanking;
 import strength.QuadRanking;
+import strength.SetRanking;
 import strength.StraightFlushRanking;
 import strength.StraightRanking;
+import strength.TwoPairsRanking;
 
 public class ShowdownEvaluator {
 
@@ -181,8 +186,123 @@ public class ShowdownEvaluator {
 					fourthCard,
 					bottomCard);
 		}
+			
+		/* Search for Sets */
+		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
+			final Value possibleSetValue = Value.values()[i];
+			final EnumSet<Suit> suitsForPossibleSetValue = suitsByValue.get(possibleSetValue);
+			if (suitsForPossibleSetValue == null)
+				continue;
+			assert suitsForPossibleSetValue.size() < 4;
+			if (suitsForPossibleSetValue.size() < 3)
+				continue;
+			assert suitsForPossibleSetValue.size() == 3;
+			
+			final Card firstKicker = findKicker(suitsByValue, ImmutableSet.of(possibleSetValue));
+			final Card secondKicker = findKicker(suitsByValue, ImmutableSet.of(possibleSetValue, firstKicker.value));
+			final Suit firstSuit, secondSuit, thirdSuit;
+			{
+				final Iterator<Suit> setSuits = suitsForPossibleSetValue.iterator();
+				firstSuit = setSuits.next();
+				secondSuit = setSuits.next();
+				thirdSuit = setSuits.next();
+				assert !setSuits.hasNext();
+			}
+			
+			return new SetRanking(possibleSetValue, firstSuit, secondSuit, thirdSuit, firstKicker, secondKicker);
+		}
 		
-		throw new UnsupportedOperationException("Not implemented yet");
+		/* Search for Two-Pairs and Pairs */
+		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
+			final Value possibleHighPairValue = Value.values()[i];
+			final EnumSet<Suit> suitsForPossibleHighPairValue = suitsByValue.get(possibleHighPairValue);
+			if (suitsForPossibleHighPairValue == null)
+				continue;
+			if (suitsForPossibleHighPairValue.size() < 2)
+				continue;
+			assert suitsForPossibleHighPairValue.size() == 2;
+
+			final Card firstCardOfHighestPair, secondCardOfHighestPair;
+			{
+				final Iterator<Suit> highPairSuits = suitsForPossibleHighPairValue.iterator();
+				firstCardOfHighestPair = new Card(possibleHighPairValue, highPairSuits.next());
+				secondCardOfHighestPair = new Card(possibleHighPairValue, highPairSuits.next());
+				assert !highPairSuits.hasNext();
+			}
+
+			for (int j = i - 1; TWO.ordinal() <= j; --j) {
+				final Value possibleLowPairValue = Value.values()[i];
+				final EnumSet<Suit> suitsForPossibleLowPairValue = suitsByValue.get(possibleLowPairValue);
+
+				if (suitsForPossibleLowPairValue == null)
+					continue;
+				if (suitsForPossibleLowPairValue.size() < 2)
+					continue;
+				assert suitsForPossibleLowPairValue.size() == 2;
+				
+				final Card kicker = findKicker(suitsByValue, ImmutableSet.of(possibleHighPairValue, possibleLowPairValue));
+				
+				
+				final Card firstCardOfLowestPair, secondCardOfLowestPair;
+				{
+					final Iterator<Suit> lowPairSuits = suitsForPossibleLowPairValue.iterator();
+					firstCardOfLowestPair = new Card(possibleLowPairValue, lowPairSuits.next());
+					secondCardOfLowestPair = new Card(possibleLowPairValue, lowPairSuits.next());
+					assert !lowPairSuits.hasNext();
+				}
+				
+				return new TwoPairsRanking(
+						firstCardOfHighestPair,
+						secondCardOfHighestPair,
+						firstCardOfLowestPair,
+						secondCardOfLowestPair,
+						kicker);
+			}
+
+			final Card firstKicker = findKicker(
+					suitsByValue, 
+					ImmutableSet.of(possibleHighPairValue));
+			
+			final Card secondKicker = findKicker(
+					suitsByValue,
+					ImmutableSet.of(possibleHighPairValue, firstKicker.value));
+			
+			final Card thirdKicker = findKicker(
+					suitsByValue,
+					ImmutableSet.of(possibleHighPairValue, firstKicker.value, secondKicker.value));
+
+			return new PairRanking(
+					possibleHighPairValue,
+					firstCardOfHighestPair.suit,
+					secondCardOfHighestPair.suit,
+					firstKicker,
+					secondKicker,
+					thirdKicker);
+		}
+		
+		/* Finally, build a ranking for high-card hands */
+		final List<Card> bestCards = new ArrayList<>(5);
+		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
+			final Value value = Value.values()[i];
+			final Set<Suit> suits = suitsByValue.get(value);
+			if (suits == null)
+				continue;
+			if (suits.isEmpty())
+				continue;
+			
+			final Suit suit = Iterables.get(suits, 0);
+			bestCards.add(new Card(value, suit));
+			
+			if (bestCards.size() == 5)
+				break;
+		}
+		assert bestCards.size() == 5;
+		return new HighCardRanking(
+				bestCards.get(0),
+				bestCards.get(1),
+				bestCards.get(2),
+				bestCards.get(3),
+				bestCards.get(4));
 	}
 
 	private Card findKicker(
