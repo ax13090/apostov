@@ -61,7 +61,7 @@ public class StraightRanking extends PokerHandRanking {
 		final Card bottomCard = allCards.get(4);
 		final ImmutableList<Value> allCardsValues = ImmutableList.copyOf(allCards.stream().map(c -> c.value).iterator());
 		
-		if (allCardsValues.equals(ImmutableList.of(ACE, TWO, THREE, FOUR, FIVE)))
+		if (allCardsValues.equals(ImmutableList.of(FIVE, FOUR, THREE, TWO, ACE)))
 			return;
 		
 		for (int i = 0; i < 4; ++i) {
