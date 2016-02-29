@@ -65,7 +65,9 @@ public class StraightRanking extends PokerHandRanking {
 			return;
 		
 		for (int i = 0; i < 4; ++i) {
-			if (bottomCard.value.ordinal() + i != allCards.get(i).value.ordinal())
+			final Value expectedValue = Value.values()[bottomCard.value.ordinal() + i];
+			final Value measuredValue = allCards.get(4 - i).value;
+			if (expectedValue != measuredValue)
 				throw new RuntimeException("Programming error: a Straight ranking is ill-formed");
 		}
 	}
