@@ -157,7 +157,11 @@ public class ShowdownEvaluator {
 			final Value secondHighestCardValue = Value.values()[straightTopValue.ordinal() - 1];
 			final Value middleCardValue = Value.values()[straightTopValue.ordinal() - 2];
 			final Value fourthCardValue = Value.values()[straightTopValue.ordinal() - 3];
-			final Value bottomCardValue = Value.values()[straightTopValue.ordinal() - 4];
+			final Value bottomCardValue;
+			if (straightTopValue == Value.FIVE)
+				bottomCardValue = Value.ACE;
+			else
+				bottomCardValue = Value.values()[straightTopValue.ordinal() - 4];
 			
 			final Card highestCard = new Card(
 					straightTopValue,
