@@ -309,8 +309,8 @@ public class ShowdownEvaluator {
 			final ImmutableMap<Value, EnumSet<Suit>> suitsByValue,
 			final ImmutableSet<Value> excludedValues)
 	{
-		for (int j = ACE.ordinal(); j <= TWO.ordinal(); --j) {
-			final Value possibleKickerValue = Value.values()[j];
+		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
+			final Value possibleKickerValue = Value.values()[i];
 			if (excludedValues.contains(possibleKickerValue))
 				continue;
 			
