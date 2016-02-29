@@ -40,6 +40,7 @@ public class ShowdownEvaluator {
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
+	// TODO idea : use Guava's Table and ImmutableTable classes instead of two ImmutableMap<X, EnumSet<Y>> types
 	public PokerHandRanking selectBestCombination(final ImmutableCollection<Card> cards) {
 		assert cards.size() >= 5;
 		
