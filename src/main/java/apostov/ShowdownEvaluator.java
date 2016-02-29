@@ -346,14 +346,15 @@ public class ShowdownEvaluator {
 			throw new RuntimeException("Programming error: trying to find a straight with less than five card values");
 		
 		int consecutiveCardsCount = 0;
-		for (int i = ACE.ordinal(); i >= TWO.ordinal(); --i) {
-			if (values.contains(i))
+		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
+			final Value value = Value.values()[i];
+			if (values.contains(value))
 				++consecutiveCardsCount;
 			else
 				consecutiveCardsCount = 0;
 			
 			if (consecutiveCardsCount == 5)
-				return Optional.of(Value.values()[i + 5]);
+				return Optional.of(Value.values()[i + 4]);
 		}
 		
 		if (consecutiveCardsCount == 4)
