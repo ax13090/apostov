@@ -231,7 +231,7 @@ public class ShowdownEvaluator {
 			}
 
 			for (int j = i - 1; TWO.ordinal() <= j; --j) {
-				final Value possibleLowPairValue = Value.values()[i];
+				final Value possibleLowPairValue = Value.values()[j];
 				final EnumSet<Suit> suitsForPossibleLowPairValue = suitsByValue.get(possibleLowPairValue);
 
 				if (suitsForPossibleLowPairValue == null)
