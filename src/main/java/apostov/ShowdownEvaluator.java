@@ -62,7 +62,7 @@ public class ShowdownEvaluator {
 		}
 		
 		/* Search for quads */
-		for (int i = ACE.ordinal(); i <= TWO.ordinal(); --i) {
+		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
 			final Value value = Value.values()[i];
 			final EnumSet<Suit> suitsForCurrentValue = suitsByValue.get(value);
 			if (suitsForCurrentValue == null)
@@ -74,7 +74,7 @@ public class ShowdownEvaluator {
 		}
 		
 		/* Search for full-houses */
-		for (int i = ACE.ordinal(); i <= TWO.ordinal(); --i) {
+		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
 			final Value possibleSetValue = Value.values()[i];
 			final EnumSet<Suit> suitsForPossibleSetValue = suitsByValue.get(possibleSetValue);
 			if (suitsForPossibleSetValue == null)
