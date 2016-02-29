@@ -11,6 +11,7 @@ import static apostov.Value.QUEEN;
 import static apostov.Value.JACK;
 import static apostov.Value.TWO;
 import static apostov.Value.NINE;
+import static apostov.Value.EIGHT;
 import static apostov.Value.SEVEN;
 import static apostov.Value.SIX;
 import static apostov.Value.TEN;
@@ -20,6 +21,7 @@ import static com.google.common.collect.Iterables.concat;
 import static org.junit.Assert.*;
 import static strength.PokerHandKind.PAIR;
 import static strength.PokerHandKind.HIGH_CARD;
+import static strength.PokerHandKind.THREE_OF_A_KIND;
 
 import org.junit.Test;
 
@@ -29,6 +31,7 @@ import com.google.common.collect.ImmutableSet;
 import strength.HighCardRanking;
 import strength.PairRanking;
 import strength.PokerHandRanking;
+import strength.SetRanking;
 
 public class ShowdownEvaluatorTest {
 
@@ -92,5 +95,37 @@ public class ShowdownEvaluatorTest {
 		assertEquals(jack, highCardRanking.middleCard);
 		assertEquals(ten, highCardRanking.fourthCard);
 		assertEquals(nine, highCardRanking.bottomCard);
+	}
+	
+	
+	@Test
+	public void selectBestCombinationWithSet() {
+		final Card queen = new Card(QUEEN, SPADES);
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				queen,
+				new Card(NINE, HEARTS));
+
+		final Card nineOfClubs = new Card(NINE, CLUBS);
+		final Card nineOfDiamonds = new Card(NINE, DIAMONDS);
+		final Card king = new Card(KING, DIAMONDS);
+		final Card ace = new Card(ACE, HEARTS);
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				nineOfClubs,
+				nineOfDiamonds,
+				king,
+				ace,
+				new Card(EIGHT, CLUBS));
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		
+		assertSame(THREE_OF_A_KIND, handStrength.handKind);
+		final SetRanking setRanking = (SetRanking) handStrength;
+		assertEquals(NINE, setRanking.valueOfTheSet);
+		assertEquals(
+				ImmutableSet.of(CLUBS, DIAMONDS, HEARTS),
+				ImmutableSet.of(setRanking.firstSuit, setRanking.secondSuit, setRanking.thirdSuit));
+		assertEquals(ace, setRanking.firstKicker);
+		assertEquals(king, setRanking.secondKicker);
 	}
 }
