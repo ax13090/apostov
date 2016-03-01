@@ -36,9 +36,12 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableSet;
 
+import strength.FlushRanking;
+import strength.FullHouseRanking;
 import strength.HighCardRanking;
 import strength.PairRanking;
 import strength.PokerHandRanking;
+import strength.QuadRanking;
 import strength.SetRanking;
 import strength.StraightFlushRanking;
 import strength.StraightRanking;
@@ -138,6 +141,31 @@ public class ShowdownEvaluatorTest {
 				ImmutableSet.of(setRanking.firstSuit, setRanking.secondSuit, setRanking.thirdSuit));
 		assertEquals(ace, setRanking.firstKicker);
 		assertEquals(king, setRanking.secondKicker);
+	}
+	
+	@Test
+	public void selectBestCombinationWithQuad() {
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				new Card(NINE, SPADES),
+				new Card(NINE, HEARTS));
+
+		final Card nineOfClubs = new Card(NINE, CLUBS);
+		final Card nineOfDiamonds = new Card(NINE, DIAMONDS);
+		final Card king = new Card(KING, DIAMONDS);
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				nineOfClubs,
+				nineOfDiamonds,
+				king,
+				new Card(SEVEN, DIAMONDS),
+				new Card(EIGHT, CLUBS));
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		
+		assertSame(FOUR_OF_A_KIND, handStrength.handKind);
+		final QuadRanking quadRanking = (QuadRanking) handStrength;
+		assertEquals(NINE, quadRanking.value);
+		assertEquals(king, quadRanking.kicker);
 	}
 	
 	@Test
@@ -262,5 +290,93 @@ public class ShowdownEvaluatorTest {
 		assertEquals(four, straightRanking.middleCard);
 		assertEquals(three, straightRanking.fourthCard);
 		assertEquals(two, straightRanking.bottomCard);
+	}
+	
+	@Test
+	public void selectBestCombinationWithFlush() {
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				new Card(TEN, SPADES),
+				new Card(EIGHT, SPADES)
+		);
+
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				new Card(NINE, SPADES),
+				new Card(TWO, HEARTS),
+				new Card(EIGHT, CLUBS),
+				new Card(TWO, SPADES),
+				new Card(QUEEN, SPADES)
+		);
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		
+		assertSame(FLUSH, handStrength.handKind);
+		final FlushRanking flushRanking = (FlushRanking) handStrength;
+		assertEquals(SPADES, flushRanking.suit);
+		assertEquals(QUEEN, flushRanking.firstValue);
+		assertEquals(TEN, flushRanking.secondValue);
+		assertEquals(NINE, flushRanking.thirdValue);
+		assertEquals(EIGHT, flushRanking.fourthValue);
+		assertEquals(TWO, flushRanking.fifthValue);
+	}
+	
+	@Test
+	public void selectBestCombinationWithSixCardFlush() {
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				new Card(TEN, SPADES),
+				new Card(THREE, SPADES)
+		);
+
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				new Card(NINE, SPADES),
+				new Card(TWO, HEARTS),
+				new Card(EIGHT, SPADES),
+				new Card(TWO, SPADES),
+				new Card(QUEEN, SPADES)
+		);
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		
+		assertSame(FLUSH, handStrength.handKind);
+		final FlushRanking flushRanking = (FlushRanking) handStrength;
+		assertEquals(SPADES, flushRanking.suit);
+		assertEquals(QUEEN, flushRanking.firstValue);
+		assertEquals(TEN, flushRanking.secondValue);
+		assertEquals(NINE, flushRanking.thirdValue);
+		assertEquals(EIGHT, flushRanking.fourthValue);
+		assertEquals(THREE, flushRanking.fifthValue);
+	}
+
+	@Test
+	public void selectBestCombinationWithFullHouse() {
+		final Card twoOfSpades = new Card(TWO, SPADES);
+		final Card fiveOfHearts = new Card(FIVE, HEARTS);
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				twoOfSpades,
+				fiveOfHearts);
+	
+		final Card twoOfClubs = new Card(TWO, CLUBS);
+		final Card fiveOfDiamonds = new Card(FIVE, DIAMONDS);
+		final Card twoOfDiamonds = new Card(TWO, DIAMONDS);
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				twoOfClubs,
+				new Card(SEVEN, DIAMONDS),
+				fiveOfDiamonds,
+				new Card(ACE, HEARTS),
+				twoOfDiamonds
+		);
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		
+		assertSame(FULL_HOUSE, handStrength.handKind);
+		final FullHouseRanking fullHouseRanking = (FullHouseRanking) handStrength;
+		assertEquals(
+				ImmutableSet.of(twoOfClubs, twoOfDiamonds, twoOfSpades),
+				ImmutableSet.of(fullHouseRanking.firstSetCard, fullHouseRanking.secondSetCard, fullHouseRanking.thirdSetCard));
+		assertEquals(
+				ImmutableSet.of(fiveOfDiamonds, fiveOfHearts),
+				ImmutableSet.of(fullHouseRanking.firstPairCard, fullHouseRanking.secondPairCard));
 	}
 }
