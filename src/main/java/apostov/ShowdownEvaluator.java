@@ -90,7 +90,7 @@ public class ShowdownEvaluator {
 				continue;
 
 			assert suitsForPossibleSetValue.size() == 3;
-			for (int j = ACE.ordinal(); j <= TWO.ordinal(); --j) {
+			for (int j = ACE.ordinal(); TWO.ordinal() <= j; --j) {
 				final Value possiblePairValue = Value.values()[j];
 				if (possibleSetValue == possiblePairValue)
 					continue;
