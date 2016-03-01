@@ -379,4 +379,89 @@ public class ShowdownEvaluatorTest {
 				ImmutableSet.of(fiveOfDiamonds, fiveOfHearts),
 				ImmutableSet.of(fullHouseRanking.firstPairCard, fullHouseRanking.secondPairCard));
 	}
+
+	@Test
+	public void selectBestCombinationWithMaxStraightFlush() {
+		final Card ace = new Card(ACE, CLUBS);
+		final Card jack = new Card(JACK, CLUBS);
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				jack,
+				ace);
+	
+		final Card king = new Card(KING, CLUBS);
+		final Card ten = new Card(TEN, CLUBS);
+		final Card queen = new Card(QUEEN, CLUBS);
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				king,
+				ten,
+				queen,
+				new Card(FIVE, DIAMONDS),
+				new Card(SEVEN, HEARTS));
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		
+		assertSame(STRAIGHT_FLUSH, handStrength.handKind);
+		final StraightFlushRanking straightRanking = (StraightFlushRanking) handStrength;
+		assertEquals(ACE, straightRanking.highestCardValue);
+		assertEquals(CLUBS, straightRanking.suit);
+	}
+
+	@Test
+	public void selectBestCombinationWithStraightFlushToTheFive() {
+		final Card three = new Card(THREE, HEARTS);
+		final Card ace = new Card(ACE, HEARTS);
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				three,
+				ace);
+	
+		final Card five = new Card(FIVE, HEARTS);
+		final Card two = new Card(TWO, HEARTS);
+		final Card four = new Card(FOUR, HEARTS);
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				five,
+				two,
+				new Card(SEVEN, SPADES),
+				new Card(QUEEN, SPADES),
+				four
+		);
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+
+		assertSame(STRAIGHT_FLUSH, handStrength.handKind);
+		final StraightFlushRanking straightRanking = (StraightFlushRanking) handStrength;
+		assertEquals(FIVE, straightRanking.highestCardValue);
+		assertEquals(HEARTS, straightRanking.suit);
+	}
+
+	@Test
+	public void selectBestCombinationWithStraightFlushToTheSix() {
+		final Card three = new Card(THREE, DIAMONDS);
+		final Card six = new Card(SIX, DIAMONDS);
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				three,
+				six);
+	
+		final Card five = new Card(FIVE, DIAMONDS);
+		final Card two = new Card(TWO, DIAMONDS);
+		final Card four = new Card(FOUR, DIAMONDS);
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				five,
+				two,
+				new Card(NINE, SPADES),
+				new Card(QUEEN, SPADES),
+				four
+		);
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+
+		assertSame(STRAIGHT_FLUSH, handStrength.handKind);
+		final StraightFlushRanking straightRanking = (StraightFlushRanking) handStrength;
+		assertEquals(SIX, straightRanking.highestCardValue);
+		assertEquals(DIAMONDS, straightRanking.suit);
+	}
+	
+	
 }
