@@ -34,6 +34,7 @@ import static strength.PokerHandKind.STRAIGHT_FLUSH;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import strength.FlushRanking;
@@ -49,6 +50,63 @@ import strength.TwoPairsRanking;
 
 public class ShowdownEvaluatorTest {
 
+	@Test
+	public void evaluateShowdownAcesVersusKings() {
+		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HolecardHand kings = new HolecardHand(new Card(KING, CLUBS), new Card(KING, SPADES));
+		
+		final Board boardWithKing = new Board(
+				new Card(FIVE, SPADES),
+				new Card(SEVEN, CLUBS),
+				new Card(FIVE, DIAMONDS),
+				new Card(NINE, CLUBS),
+				new Card(TEN, DIAMONDS));
+		
+		final ImmutableSet<HolecardHand> winners = new ShowdownEvaluator().evaluateShowdown(
+				ImmutableList.of(aces, kings),
+				boardWithKing);
+		
+		assertEquals(ImmutableSet.of(aces), winners);
+	}
+
+	@Test
+	public void evaluateShowdownAcesVersusLuckyKings() {
+		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HolecardHand kings = new HolecardHand(new Card(KING, CLUBS), new Card(KING, SPADES));
+		
+		final Board boardWithKing = new Board(
+				new Card(FIVE, SPADES),
+				new Card(SEVEN, CLUBS),
+				new Card(KING, DIAMONDS),
+				new Card(NINE, CLUBS),
+				new Card(TEN, DIAMONDS));
+		
+		final ImmutableSet<HolecardHand> winners = new ShowdownEvaluator().evaluateShowdown(
+				ImmutableList.of(aces, kings),
+				boardWithKing);
+		
+		assertEquals(ImmutableSet.of(kings), winners);
+	}
+	
+	@Test
+	public void evaluateShowdownWhenPlayingTheBoard() {
+		final HolecardHand rags1 = new HolecardHand(new Card(FOUR, HEARTS), new Card(TWO, CLUBS));
+		final HolecardHand rags2 = new HolecardHand(new Card(TWO, HEARTS), new Card(THREE, SPADES));
+		
+		final Board board = new Board(
+				new Card(FIVE, SPADES),
+				new Card(SEVEN, CLUBS),
+				new Card(SIX, SPADES),
+				new Card(NINE, CLUBS),
+				new Card(ACE, SPADES));
+		
+		final ImmutableSet<HolecardHand> winners = new ShowdownEvaluator().evaluateShowdown(
+				ImmutableList.of(rags1, rags2),
+				board);
+		
+		assertEquals(ImmutableSet.of(rags1, rags2), winners);
+	}
+	
 	@Test
 	public void selectBestCombinationWithTwoKings() {
 		final Card seven = new Card(SEVEN, SPADES);

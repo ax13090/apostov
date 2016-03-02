@@ -3,10 +3,12 @@ package apostov;
 import static apostov.Value.ACE;
 import static apostov.Value.TWO;
 import static com.google.common.collect.ImmutableList.copyOf;
+import static com.google.common.collect.Iterables.concat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,11 +18,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 import strength.FlushRanking;
 import strength.FullHouseRanking;
 import strength.HighCardRanking;
 import strength.PairRanking;
+import strength.PokerHandComparator;
 import strength.PokerHandRanking;
 import strength.QuadRanking;
 import strength.SetRanking;
@@ -30,8 +34,30 @@ import strength.TwoPairsRanking;
 
 public class ShowdownEvaluator {
 
-	public void evaluateShowdown(final ImmutableList<HolecardHand> candidates, final Board board) {
-		throw new UnsupportedOperationException("Not implemented yet");
+	public ImmutableSet<HolecardHand> evaluateShowdown(final ImmutableList<HolecardHand> candidates, final Board board) {
+		final PokerHandComparator pokerHandComparator = new PokerHandComparator();
+		final Map<HolecardHand, PokerHandRanking> strengths = Maps.toMap(
+				candidates,
+				c -> selectBestCombination(copyOf(concat(c.getHolecardsAsList(), board.getBoardCardList()))));
+		
+		final List<HolecardHand> winners = new ArrayList<>();
+		for (final HolecardHand holecards : candidates) {
+			final PokerHandRanking currentHandRanking = strengths.get(holecards);
+			if (winners.isEmpty()) {
+				winners.add(holecards);
+				continue;
+			} else {
+				final PokerHandRanking previousBestRanking = strengths.get(winners.get(0));
+				final int comparisonResult = pokerHandComparator.compare(previousBestRanking, currentHandRanking);
+				if (comparisonResult == 0) {
+					winners.add(holecards);
+				} else if (comparisonResult < 0) {
+					winners.clear();
+					winners.add(holecards);
+				}
+			}
+		}
+		return ImmutableSet.copyOf(winners);
 	}
 	
 	public PokerHandRanking selectBestCombination(final ImmutableCollection<Card> cards) {
