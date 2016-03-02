@@ -37,16 +37,16 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import strength.FlushRanking;
-import strength.FullHouseRanking;
-import strength.HighCardRanking;
-import strength.PairRanking;
-import strength.PokerHandRanking;
-import strength.QuadRanking;
-import strength.SetRanking;
-import strength.StraightFlushRanking;
-import strength.StraightRanking;
-import strength.TwoPairsRanking;
+import strength.ranking.FlushRanking;
+import strength.ranking.FullHouseRanking;
+import strength.ranking.HighCardRanking;
+import strength.ranking.PairRanking;
+import strength.ranking.PokerHandRanking;
+import strength.ranking.QuadRanking;
+import strength.ranking.SetRanking;
+import strength.ranking.StraightFlushRanking;
+import strength.ranking.StraightRanking;
+import strength.ranking.TwoPairsRanking;
 
 public class ShowdownEvaluatorTest {
 

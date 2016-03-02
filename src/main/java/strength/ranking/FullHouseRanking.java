@@ -1,4 +1,4 @@
-package strength;
+package strength.ranking;
 
 import java.util.Comparator;
 import java.util.stream.Stream;
@@ -7,6 +7,7 @@ import com.google.common.collect.Ordering;
 
 import apostov.Card;
 import apostov.Value;
+import strength.PokerHandKind;
 
 public class FullHouseRanking extends PokerHandRanking {
 

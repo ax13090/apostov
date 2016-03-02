@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 import com.google.common.collect.Ordering;
 
+import strength.ranking.PokerHandRanking;
+
 /**
  * A {@link Comparator} implementation for poker hand rankings.
  * This is actually a subclass of Guava's {@link Ordering} class, which

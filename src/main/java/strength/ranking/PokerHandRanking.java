@@ -1,4 +1,7 @@
-package strength;
+package strength.ranking;
+
+import strength.PokerHandComparator;
+import strength.PokerHandKind;
 
 /*
  * Note: this class implements Comparable in a peculiar way. One is supposed

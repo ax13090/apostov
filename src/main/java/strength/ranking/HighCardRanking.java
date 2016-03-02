@@ -1,10 +1,11 @@
-package strength;
+package strength.ranking;
 
 import java.util.Comparator;
 
 import com.google.common.collect.Ordering;
 
 import apostov.Card;
+import strength.PokerHandKind;
 
 public class HighCardRanking extends PokerHandRanking {
 

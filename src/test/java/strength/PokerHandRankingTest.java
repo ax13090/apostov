@@ -13,6 +13,10 @@ import com.google.common.collect.ImmutableList;
 import apostov.Card;
 import apostov.Suit;
 import apostov.Value;
+import strength.ranking.FullHouseRanking;
+import strength.ranking.PokerHandRanking;
+import strength.ranking.StraightFlushRanking;
+import strength.ranking.StraightRanking;
 
 public class PokerHandRankingTest {
 
