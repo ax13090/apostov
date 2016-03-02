@@ -281,9 +281,8 @@ public class ShowdownEvaluator {
 				continue;
 			
 			final ImmutableMap<Suit, Card> row = table.row(possibleKickerValue);
-			final Set<Suit> suitsForThisPossibleKicker = row.keySet();
-			if (suitsForThisPossibleKicker.size() > 0)
-				return Iterables.get(row.entrySet(), 0).getValue();
+			if (row.size() > 0)
+				return Iterables.get(row.values(), 0);
 		}
 		
 		throw new RuntimeException("Failed to find a kicker");
