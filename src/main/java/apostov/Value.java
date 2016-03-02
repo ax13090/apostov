@@ -2,6 +2,7 @@ package apostov;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+// TODO Add two methods returning there values into immutable lists, in normal and reverse orders.
 public enum Value {
 	
 	TWO('2'),
