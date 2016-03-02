@@ -25,4 +25,12 @@ public class StraightFlushRanking extends PokerHandRanking {
 		final StraightFlushRanking other = (StraightFlushRanking) o;
 		return ordering().compare(this, other);
 	}
+	
+	@Override
+	public String toString() {
+		if (highestCardValue == Value.ACE)
+			return "Royal Flush";
+		else
+			return "Straight Flush: " + highestCardValue.singular();
+	}
 }

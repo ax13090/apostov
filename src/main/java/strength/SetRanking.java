@@ -47,4 +47,10 @@ public class SetRanking extends PokerHandRanking {
 		final SetRanking other = (SetRanking) o;
 		return ordering().compare(this, other);
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "Three " + valueOfTheSet.plural();
+	}
 }

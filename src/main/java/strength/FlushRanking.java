@@ -49,4 +49,9 @@ public class FlushRanking extends PokerHandRanking {
 		final FlushRanking other = (FlushRanking) o;
 		return ordering().compare(this, other);
 	}
+	
+	@Override 
+	public String toString() {
+		return "Flush: " + firstValue.plural();
+	}
 }

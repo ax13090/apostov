@@ -45,4 +45,8 @@ public class HighCardRanking extends PokerHandRanking {
 		return ordering().compare(this, other);
 	}
 	
+	@Override
+	public String toString() {
+		return "High card: " + highestCard.value.singular();
+	}
 }

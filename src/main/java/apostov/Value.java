@@ -1,5 +1,7 @@
 package apostov;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 public enum Value {
 	
 	TWO('2'),
@@ -21,5 +23,18 @@ public enum Value {
 	}
 	
 	public final char shortName;
+	
+	/**
+	 * @return the singular form of this Value, such as <tt>"Ace"</tt> or <tt>"King"</tt>.
+	 */
+	public String singular() {
+		return WordUtils.capitalize(name());
+	}	
+	/**
+	 * @return the plural form of this Value, such as <tt>"Aces"</tt> or <tt>"Kings"</tt>.
+	 */
+	public String plural() {
+		return singular() + 's';
+	}
 }
 

@@ -29,4 +29,9 @@ public class QuadRanking extends PokerHandRanking {
 		final QuadRanking other = (QuadRanking) o;
 		return ordering().compare(this, other);
 	}
+	
+	@Override
+	public String toString() {
+		return "Four " + value.plural();
+	}
 }

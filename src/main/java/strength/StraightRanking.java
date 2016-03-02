@@ -81,4 +81,9 @@ public class StraightRanking extends PokerHandRanking {
 		final StraightRanking other = (StraightRanking) o;
 		return ordering().compare(this, other);
 	}
+	
+	@Override
+	public String toString() {
+		return "Straight to the " + highestCard.value.singular();
+	}
 }

@@ -61,4 +61,9 @@ public class FullHouseRanking extends PokerHandRanking {
 		final FullHouseRanking other = (FullHouseRanking) o;
 		return ordering().compare(this, other);
 	}
+	
+	@Override
+	public String toString() {
+		return valueOfTheSet() + " full of " + valueOfThePair();
+	}
 }

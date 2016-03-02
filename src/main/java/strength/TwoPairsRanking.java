@@ -41,5 +41,12 @@ public class TwoPairsRanking extends PokerHandRanking {
 	public int compareTo(final PokerHandRanking o) {
 		final TwoPairsRanking other = (TwoPairsRanking) o;
 		return ordering().compare(this, other);
+	}	
+	
+	@Override
+	public String toString() {
+		return "Two pairs: " + firstCardOfHighestPair.value.plural() 
+		+ " and " + firstCardOfLowestPair.value.singular()
+		+ ", with kicker " + kicker.value.singular();
 	}
 }

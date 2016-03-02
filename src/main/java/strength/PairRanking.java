@@ -48,4 +48,12 @@ public class PairRanking extends PokerHandRanking {
 		final PairRanking other = (PairRanking) o;
 		return ordering().compare(this, other);
 	}
+	
+	@Override
+	public String toString() {
+		return "Pair of " + pairValue.plural() 
+		+ " with kickers " + firstKicker.value.singular()
+		+ ", " + secondKicker.value.singular()
+		+ ", " + thirdKicker.value.singular();
+	}
 }
