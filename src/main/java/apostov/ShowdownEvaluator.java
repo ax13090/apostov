@@ -69,11 +69,11 @@ public class ShowdownEvaluator {
 		 * This works by assuming that there can not be two straight-flushes
 		 * in different suits, which is true for Texas Holdem. */
 		for (final Suit suit : Suit.values()) {
-			final Set<Value> mutableValues = table.column(suit).keySet();
-			if (mutableValues.size() < 5)
+			final Set<Value> valuesForThisSuit = table.column(suit).keySet();
+			if (valuesForThisSuit.size() < 5)
 				continue;
 			
-			final Optional<Value> optionalStraightFlushHighValue = searchFiveConsecutiveValues(mutableValues);
+			final Optional<Value> optionalStraightFlushHighValue = searchFiveConsecutiveValues(valuesForThisSuit);
 			if (optionalStraightFlushHighValue.isPresent()) {
 				final Value straightFlushHighValue = optionalStraightFlushHighValue.get();
 				return new StraightFlushRanking(straightFlushHighValue, suit);
