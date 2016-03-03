@@ -317,8 +317,13 @@ public class ShowdownEvaluator {
 	}
 
 	private Optional<Value> searchFiveConsecutiveValues(final Set<Value> values) {
+		/* There can be no straight if the cards take only four values or less.
+		 * This is nonetheless a possible case, when the cards are three pairs
+		 * and a single value. In this case no hand better than a straight is found,
+		 * so we should return absent() without raising an exception. 
+		 * Then, the search for sets and two-pairs can proceed.*/
 		if (values.size() < 5)
-			throw new RuntimeException("Programming error: trying to find a straight with less than five card values");
+			return Optional.empty();
 		
 		int consecutiveCardsCount = 0;
 		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
