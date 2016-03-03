@@ -106,9 +106,12 @@ public class ShowdownEvaluator {
 				
 				final ImmutableMap<Suit, Card> cardsForPairMappedBySuit = table.row(possiblePairValue);
 				final Set<Suit> suitsForPossiblePairValue = cardsForPairMappedBySuit.keySet();
-				assert cardsForPairMappedBySuit.size() < 3;
 				
-				if (suitsForPossiblePairValue.size() == 2) {
+				/* This assert cannot reliably check that size of potential-pair cards is strictly smaller
+				 * than 3. The reason is full-houses made of two sets. There are rare but happen. */
+				assert cardsForPairMappedBySuit.size() < 4;
+				
+				if (suitsForPossiblePairValue.size() >= 2) {
 					final Iterator<Card> setCards = cardsForSetMappedBySuit.values().iterator();
 					final Iterator<Card> pairCards = cardsForPairMappedBySuit.values().iterator();
 					final FullHouseRanking fullHouseRanking = new FullHouseRanking(
@@ -118,7 +121,6 @@ public class ShowdownEvaluator {
 							pairCards.next(),
 							pairCards.next());
 					assert !setCards.hasNext();
-					assert !pairCards.hasNext();
 					
 					return fullHouseRanking;
 				}
