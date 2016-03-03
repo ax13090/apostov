@@ -520,6 +520,29 @@ public class ShowdownEvaluatorTest {
 		assertEquals(SIX, straightRanking.highestCardValue);
 		assertEquals(DIAMONDS, straightRanking.suit);
 	}
+
+	@Test
+	public void selectBestCombinationWithTrickyFullHouse() {
+		final ImmutableCollection<Card> holeCards = ImmutableSet.of(
+				new Card(TWO, SPADES),
+				new Card(FIVE, HEARTS));
+	
+		final ImmutableCollection<Card> board = ImmutableSet.of(
+				new Card(TWO, CLUBS),
+				new Card(SEVEN, DIAMONDS),
+				new Card(FIVE, DIAMONDS),
+				new Card(FIVE, CLUBS),
+				new Card(TWO, DIAMONDS)
+		);
+		
+		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		
+		assertSame(FULL_HOUSE, handStrength.handKind);
+		final FullHouseRanking fullHouseRanking = (FullHouseRanking) handStrength;
+		assertEquals(FIVE, fullHouseRanking.valueOfTheSet());
+		assertEquals(TWO, fullHouseRanking.valueOfThePair());
+	}
 	
 	
 }
