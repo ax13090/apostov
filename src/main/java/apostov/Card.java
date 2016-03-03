@@ -36,7 +36,7 @@ public class Card {
 
 	@Override
 	public String toString() {
-		final char valueAsCharacter = value.name().charAt(0);
+		final char valueAsCharacter = value.shortName;
 		final char suitAsCharacter = Character.toLowerCase(suit.name().charAt(0));
 		return new String(new char[]{valueAsCharacter, suitAsCharacter});
 	}
