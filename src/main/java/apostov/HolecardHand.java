@@ -15,4 +15,9 @@ public class HolecardHand {
 	public ImmutableSet<Card> getHolecardsAsList() {
 		return ImmutableSet.of(firstCard, secondCard);
 	}
+	
+	@Override
+	public String toString() {
+		return firstCard.toString() + secondCard.toString();
+	}
 }
