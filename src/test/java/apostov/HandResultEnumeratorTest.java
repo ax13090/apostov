@@ -1,20 +1,19 @@
 package apostov;
 
 import static apostov.Suit.CLUBS;
-import static apostov.Suit.SPADES;
 import static apostov.Suit.DIAMONDS;
 import static apostov.Suit.HEARTS;
+import static apostov.Suit.SPADES;
 import static apostov.Value.ACE;
-import static apostov.Value.SEVEN;
-import static apostov.Value.TWO;
 import static apostov.Value.QUEEN;
+import static apostov.Value.SEVEN;
 import static apostov.Value.TEN;
+import static apostov.Value.TWO;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
 import org.apache.commons.math3.fraction.Fraction;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -22,11 +21,6 @@ import com.google.common.collect.Maps;
 
 public class HandResultEnumeratorTest {
 
-	@Before
-	public void sleepForAwhile() throws InterruptedException {
-		//Thread.sleep(15000);
-	}
-	
 	@Test
 	public void test01() {
 		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));

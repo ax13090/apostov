@@ -7,7 +7,6 @@ import static java.util.stream.Collectors.toSet;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
@@ -35,8 +34,7 @@ public class HandResultEnumerator {
 		final int binomialCoefficient = (int) CombinatoricsUtils.binomialCoefficient(deck.size(), 5);
 		
 		final ForkJoinPool pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
-		final Map<HolecardHand, Fraction> overallSuccessChanceByHand;
-		final Callable<ConcurrentMap<HolecardHand, Fraction>> successChanceComputationTask = 
+		final Callable<? extends Map<HolecardHand, Fraction>> successChanceComputationTask = 
 			() -> StreamSupport.stream(new Combinations(deck.size(), 5).spliterator(), true)
 				.map((a) -> stream(a).mapToObj(i -> deck.get(i)).collect(toList()))
 				.map(l -> {
@@ -52,6 +50,7 @@ public class HandResultEnumerator {
 						Map.Entry::getValue,
 						(x, y) -> x.add(y)));
 		
+		final Map<HolecardHand, Fraction> overallSuccessChanceByHand;
 		try {
 			overallSuccessChanceByHand = pool.submit(successChanceComputationTask).get();
 		} catch (final InterruptedException | ExecutionException e) {

@@ -13,6 +13,7 @@ import strength.ranking.PokerHandRanking;
  */
 public class PokerHandComparator extends Ordering<PokerHandRanking> {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public int compare(final PokerHandRanking h1, final PokerHandRanking h2) {
 
