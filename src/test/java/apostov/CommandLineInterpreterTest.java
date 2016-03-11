@@ -6,6 +6,6 @@ public class CommandLineInterpreterTest {
 
 	@Test
 	public void test01() {
-		new CommandLineInterpreter().interpretArguments(new String[]{"AsAh", "2h7d"});
+		new CommandLineInterpreter().interpretArguments(new String[]{"AsAh", "2h7d", "JhTh"});
 	}
 }
