@@ -1,15 +1,33 @@
 package apostov;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.commons.math3.fraction.Fraction;
+
 import com.google.common.collect.ImmutableList;
 
 public class CommandLineInterpreter {
 
 	public void interpretArguments(final String[] arguments) {
-		if (arguments.length == 2) {
-			final HolecardHand hand1 = holecardHandFromFourCharacters(arguments[0]);
-			final HolecardHand hand2 = holecardHandFromFourCharacters(arguments[1]);
+		if (arguments.length >= 2) {
 			
-			new HandResultEnumerator().enumerateBoardsAndMeasureWins(ImmutableList.of(hand1, hand2));
+			final List<HolecardHand> competingHands = 
+					Arrays.stream(arguments)
+						.map(arg -> holecardHandFromFourCharacters(arg))
+						.collect(Collectors.toList());
+			
+			
+			final Map<HolecardHand, Fraction> winsByHand = new HandResultEnumerator().enumerateBoardsAndMeasureWins(ImmutableList.copyOf(competingHands));
+			for (final Map.Entry<HolecardHand, Fraction> entry : winsByHand.entrySet()) {
+				final HolecardHand hand = entry.getKey();
+				final Fraction fraction = entry.getValue();
+				
+				System.out.println(hand + "\t" + String.format("%.02f%%", 100 * fraction.doubleValue()));
+			}
+			
 		} else {
 			throw new RuntimeException("Unexpected number of arguments");
 		}
