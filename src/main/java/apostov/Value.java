@@ -1,8 +1,12 @@
 package apostov;
 
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 public enum Value {
 	
@@ -27,6 +31,10 @@ public enum Value {
 	public final char shortName;
 	public static final ImmutableList<Value> asAscendingList = ImmutableList.copyOf(values());
 	public static final ImmutableList<Value> asDescendingList = ImmutableList.copyOf(values()).reverse();
+	public static final ImmutableMap<Character, Value> byShortName = ImmutableMap.copyOf(
+			asAscendingList
+			.stream()
+			.collect(Collectors.toMap(Value::shortName, Function.identity())));
 	
 	/**
 	 * @return the singular form of this Value, such as <tt>"Ace"</tt> or <tt>"King"</tt>.
@@ -39,6 +47,10 @@ public enum Value {
 	 */
 	public String plural() {
 		return singular() + 's';
+	}
+	
+	public Character shortName() {
+		return shortName;
 	}
 }
 
