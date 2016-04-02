@@ -26,6 +26,11 @@ cd apostov
 java -ea -jar build/libs/apostov-all.jar 2c7s AcAs
 2c7s    11,02%
 AcAs    88,98%
+
+# And now the same hands, but after a lucky flop
+java -ea -jar build/libs/apostov-all.jar 2c7s AcAs --board 2h7hKd
+2c7s    74,55%
+AcAs    25,45%
 ```
 
 ## Author and license

@@ -5,6 +5,7 @@ import static apostov.Suit.DIAMONDS;
 import static apostov.Suit.HEARTS;
 import static apostov.Suit.SPADES;
 import static apostov.Value.ACE;
+import static apostov.Value.KING;
 import static apostov.Value.QUEEN;
 import static apostov.Value.SEVEN;
 import static apostov.Value.TEN;
@@ -41,14 +42,91 @@ public class HandResultEnumeratorTest {
 		assertTrue(percentages.get(aceTen).doubleValue() > 0.7);
 		assertTrue(percentages.get(queenTen).doubleValue() < 0.3);
 	}
+	
+	@Test
+	public void test03() {
+		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		
+		final ImmutableList<Card> board = ImmutableList.of(new Card(TWO, DIAMONDS), new Card(TWO, SPADES), new Card(TEN, HEARTS));
+		
+		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+				ImmutableList.of(aces, trash),
+				board);
+		System.out.println("Board: " + board);
+		displayResults(percentages);
+		assertTrue(percentages.get(aces).doubleValue() < percentages.get(trash).doubleValue());
+	}
+	
+	@Test
+	public void test04() {
+		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		
+		final ImmutableList<Card> board = ImmutableList.of(new Card(TWO, DIAMONDS), new Card(TWO, SPADES), new Card(TWO, HEARTS));
+		
+		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+				ImmutableList.of(aces, trash),
+				board);
+		System.out.println("Board: " + board);
+		displayResults(percentages);
+		assertTrue(percentages.get(aces).doubleValue() < percentages.get(trash).doubleValue());
+	}
+	
+	@Test
+	public void test05() {
+		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		
+		final ImmutableList<Card> board = ImmutableList.of(
+				new Card(TWO, DIAMONDS),
+				new Card(TWO, SPADES),
+				new Card(TWO, HEARTS),
+				new Card(ACE, DIAMONDS),
+				new Card(ACE, HEARTS)
+		);
+		
+		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+				ImmutableList.of(aces, trash),
+				board);
+		System.out.println("Board: " + board);
+		displayResults(percentages);
+		assertTrue(percentages.get(aces).equals(Fraction.ONE));
+		assertTrue(percentages.get(trash).equals(Fraction.ZERO));
+	}
+	
+	@Test
+	public void test06() {
+		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		
+		final ImmutableList<Card> board = ImmutableList.of(
+				new Card(TWO, DIAMONDS),
+				new Card(TWO, SPADES),
+				new Card(TWO, HEARTS),
+				new Card(ACE, DIAMONDS),
+				new Card(KING, HEARTS)
+		);
+		
+		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+				ImmutableList.of(aces, trash),
+				board);
+		System.out.println("Board: " + board);
+		displayResults(percentages);
+		assertTrue(percentages.get(aces).equals(Fraction.ZERO));
+		assertTrue(percentages.get(trash).equals(Fraction.ONE));
+	}
 
 	private Map<HolecardHand, Fraction> computePercentages(final HolecardHand h1, final HolecardHand h2) {
 		final Map<HolecardHand, Fraction> result = new HandResultEnumerator().enumerateBoardsAndMeasureWins(ImmutableList.of(h1, h2));
 		final Fraction sum = result.values().stream().reduce((x,y) -> x.add(y)).get();
 		assertEquals(1, sum.intValue());
-		
-		System.out.println(Maps.transformValues(result, f -> String.format("%.02f%%", 100 * f.doubleValue())));
+		displayResults(result);
 		return result;
+	}
+
+	private void displayResults(final Map<HolecardHand, Fraction> result) {
+		System.out.println(Maps.transformValues(result, f -> String.format("%.02f%%", 100 * f.doubleValue())));
 	}
 	
 }
