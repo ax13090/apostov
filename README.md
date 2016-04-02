@@ -19,6 +19,14 @@ git clone 'https://github.com/ax13090/apostov.git'
 cd apostov
 ./gradlew shadowJar
 ```
+## Examples
+
+```
+# Let's compare the odds of pocket rockets against 72o.
+java -ea -jar build/libs/apostov-all.jar 2c7s AcAs
+2c7s    11,02%
+AcAs    88,98%
+```
 
 ## Author and license
 This project is written by Axel de Sablet and release into the public domain for use by anyone who finds it useful. 
