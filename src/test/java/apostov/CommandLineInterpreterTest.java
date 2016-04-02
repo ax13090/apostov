@@ -8,4 +8,12 @@ public class CommandLineInterpreterTest {
 	public void test01() {
 		new CommandLineInterpreter().interpretArguments(new String[]{"AsAh", "2h7d", "JhTh"});
 	}
+	
+	@Test
+	public void test02() {
+		new CommandLineInterpreter().interpretArguments(new String[]{
+				"AsAh", "2h7d", "JhTh",
+				"--board", "2s2cJd"
+		});
+	}
 }
