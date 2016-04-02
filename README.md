@@ -9,7 +9,7 @@ The poker variant is considered to be No-Limit Texas Holdem through all the code
 
 The program takes a set of holecards as input, and computes all the possible boards. All the contesting hands will be matched against each board, which allows us to compute the odds of winning for each hand. In other words, what this program computes is the same thing as the percentages showed in poker television programmes, when the players are all-in before the flop and table (or show) their hands.
 
-For now all that is provided is a library of classes, without a command-line or graphical user-interface.
+For now all that is provided is a library of classes, with a command-line interface but no graphical user-interface.
 
 ## Building
 The code is pure Java 8, and uses a few dependencies. The building and dependencies is managed by Gradle configuration files. To build it, all you need is a JDK 1.8.
