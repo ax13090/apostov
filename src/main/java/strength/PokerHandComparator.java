@@ -32,7 +32,7 @@ public class PokerHandComparator extends Ordering<PokerHandRanking> {
 		 * according to the common class of the two hand objects.
 		 * 
 		 * This is where a Java warning concerning generic types is suppressed.
-		 * Sugestions on how to avoid suppressing warnings here are welcome  :-) */
+		 * Sugestions on how to nicely avoid suppressing warnings here are welcome  :-) */
 		assert h1.handKind == h2.handKind;
 		return h1.compareTo(h2);
 	}
