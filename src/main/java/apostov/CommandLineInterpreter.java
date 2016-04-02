@@ -40,8 +40,16 @@ public class CommandLineInterpreter {
 					board = ImmutableList.of();
 				competingHands = builder.build();
 			}
-			
 			final Map<HolecardHand, Fraction> winsByHand = new HandResultEnumerator().enumerateBoardsAndMeasureWins(competingHands, board);
+			
+			if (board.size() > 0) {
+				final StringBuilder builder = new StringBuilder();
+				builder.append("Board: ");
+				for (final Card card : board) {
+					builder.append(card + " ");
+				}
+				System.out.println(builder);
+			}
 			for (final Map.Entry<HolecardHand, Fraction> entry : winsByHand.entrySet()) {
 				final HolecardHand hand = entry.getKey();
 				final Fraction fraction = entry.getValue();
