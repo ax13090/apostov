@@ -1,4 +1,4 @@
-package strength.ranking;
+package apostov.strength.ranking;
 
 import static apostov.Value.ACE;
 import static apostov.Value.FIVE;
@@ -11,7 +11,7 @@ import com.google.common.collect.Ordering;
 
 import apostov.Card;
 import apostov.Value;
-import strength.PokerHandKind;
+import apostov.strength.PokerHandKind;
 
 public class StraightRanking extends PokerHandRanking {
 

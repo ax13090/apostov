@@ -1,7 +1,7 @@
-package strength.ranking;
+package apostov.strength.ranking;
 
-import strength.PokerHandComparator;
-import strength.PokerHandKind;
+import apostov.strength.PokerHandComparator;
+import apostov.strength.PokerHandKind;
 
 /*
  * Note: this class implements Comparable in a peculiar way. One is supposed

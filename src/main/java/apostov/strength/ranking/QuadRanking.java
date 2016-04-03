@@ -1,4 +1,4 @@
-package strength.ranking;
+package apostov.strength.ranking;
 
 import java.util.Comparator;
 
@@ -6,7 +6,7 @@ import com.google.common.collect.Ordering;
 
 import apostov.Card;
 import apostov.Value;
-import strength.PokerHandKind;
+import apostov.strength.PokerHandKind;
 
 public class QuadRanking extends PokerHandRanking {
 

@@ -20,17 +20,17 @@ import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
-import strength.PokerHandComparator;
-import strength.ranking.FlushRanking;
-import strength.ranking.FullHouseRanking;
-import strength.ranking.HighCardRanking;
-import strength.ranking.PairRanking;
-import strength.ranking.PokerHandRanking;
-import strength.ranking.QuadRanking;
-import strength.ranking.SetRanking;
-import strength.ranking.StraightFlushRanking;
-import strength.ranking.StraightRanking;
-import strength.ranking.TwoPairsRanking;
+import apostov.strength.PokerHandComparator;
+import apostov.strength.ranking.FlushRanking;
+import apostov.strength.ranking.FullHouseRanking;
+import apostov.strength.ranking.HighCardRanking;
+import apostov.strength.ranking.PairRanking;
+import apostov.strength.ranking.PokerHandRanking;
+import apostov.strength.ranking.QuadRanking;
+import apostov.strength.ranking.SetRanking;
+import apostov.strength.ranking.StraightFlushRanking;
+import apostov.strength.ranking.StraightRanking;
+import apostov.strength.ranking.TwoPairsRanking;
 
 public class ShowdownEvaluator {
 

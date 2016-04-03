@@ -10,6 +10,15 @@ import static apostov.Value.KING;
 import static apostov.Value.QUEEN;
 import static apostov.Value.JACK;
 import static apostov.Value.TWO;
+import static apostov.strength.PokerHandKind.FLUSH;
+import static apostov.strength.PokerHandKind.FOUR_OF_A_KIND;
+import static apostov.strength.PokerHandKind.FULL_HOUSE;
+import static apostov.strength.PokerHandKind.HIGH_CARD;
+import static apostov.strength.PokerHandKind.PAIR;
+import static apostov.strength.PokerHandKind.STRAIGHT;
+import static apostov.strength.PokerHandKind.STRAIGHT_FLUSH;
+import static apostov.strength.PokerHandKind.THREE_OF_A_KIND;
+import static apostov.strength.PokerHandKind.TWO_PAIRS;
 import static apostov.Value.THREE;
 import static apostov.Value.NINE;
 import static apostov.Value.EIGHT;
@@ -20,16 +29,6 @@ import static apostov.Value.ACE;
 import static com.google.common.collect.ImmutableSet.copyOf;
 import static com.google.common.collect.Iterables.concat;
 import static org.junit.Assert.*;
-import static strength.PokerHandKind.HIGH_CARD;
-import static strength.PokerHandKind.PAIR;
-import static strength.PokerHandKind.TWO_PAIRS;
-import static strength.PokerHandKind.THREE_OF_A_KIND;
-import static strength.PokerHandKind.STRAIGHT;
-import static strength.PokerHandKind.FLUSH;
-import static strength.PokerHandKind.FULL_HOUSE;
-import static strength.PokerHandKind.FOUR_OF_A_KIND;
-import static strength.PokerHandKind.STRAIGHT_FLUSH;
-
 
 import org.junit.Test;
 
@@ -37,16 +36,16 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import strength.ranking.FlushRanking;
-import strength.ranking.FullHouseRanking;
-import strength.ranking.HighCardRanking;
-import strength.ranking.PairRanking;
-import strength.ranking.PokerHandRanking;
-import strength.ranking.QuadRanking;
-import strength.ranking.SetRanking;
-import strength.ranking.StraightFlushRanking;
-import strength.ranking.StraightRanking;
-import strength.ranking.TwoPairsRanking;
+import apostov.strength.ranking.FlushRanking;
+import apostov.strength.ranking.FullHouseRanking;
+import apostov.strength.ranking.HighCardRanking;
+import apostov.strength.ranking.PairRanking;
+import apostov.strength.ranking.PokerHandRanking;
+import apostov.strength.ranking.QuadRanking;
+import apostov.strength.ranking.SetRanking;
+import apostov.strength.ranking.StraightFlushRanking;
+import apostov.strength.ranking.StraightRanking;
+import apostov.strength.ranking.TwoPairsRanking;
 
 public class ShowdownEvaluatorTest {
 

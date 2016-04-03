@@ -1,10 +1,10 @@
-package strength;
+package apostov.strength;
 
 import java.util.Comparator;
 
 import com.google.common.collect.Ordering;
 
-import strength.ranking.PokerHandRanking;
+import apostov.strength.ranking.PokerHandRanking;
 
 /**
  * A {@link Comparator} implementation for poker hand rankings.

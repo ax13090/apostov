@@ -11,10 +11,11 @@ import com.google.common.collect.ImmutableList;
 import apostov.Card;
 import apostov.Suit;
 import apostov.Value;
-import strength.ranking.HighCardRanking;
-import strength.ranking.PairRanking;
-import strength.ranking.PokerHandRanking;
-import strength.ranking.SetRanking;
+import apostov.strength.PokerHandComparator;
+import apostov.strength.ranking.HighCardRanking;
+import apostov.strength.ranking.PairRanking;
+import apostov.strength.ranking.PokerHandRanking;
+import apostov.strength.ranking.SetRanking;
 
 public class PokerHandComparatorTest {
 

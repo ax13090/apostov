@@ -1,4 +1,4 @@
-package strength;
+package apostov.strength;
 
 public enum PokerHandKind {
 	HIGH_CARD,

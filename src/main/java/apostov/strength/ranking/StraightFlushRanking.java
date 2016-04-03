@@ -1,10 +1,10 @@
-package strength.ranking;
+package apostov.strength.ranking;
 
 import com.google.common.collect.Ordering;
 
 import apostov.Suit;
 import apostov.Value;
-import strength.PokerHandKind;
+import apostov.strength.PokerHandKind;
 
 public class StraightFlushRanking extends PokerHandRanking {
 	
