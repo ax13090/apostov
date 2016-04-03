@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.math3.fraction.Fraction;
+import org.apache.commons.math3.util.ArithmeticUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
@@ -40,7 +41,11 @@ public class CommandLineInterpreter {
 					board = ImmutableList.of();
 				competingHands = builder.build();
 			}
+			
+			final long beginTime = System.nanoTime();
 			final Map<HolecardHand, Fraction> winsByHand = new HandResultEnumerator().enumerateBoardsAndMeasureWins(competingHands, board);
+			final long endTime = System.nanoTime();
+			final long executionTimeIsMilliseconds = (endTime - beginTime) / ArithmeticUtils.pow(1000, 2);
 			
 			if (board.size() > 0) {
 				final StringBuilder builder = new StringBuilder();
@@ -56,7 +61,8 @@ public class CommandLineInterpreter {
 				
 				System.out.println(hand + "\t" + String.format("%.02f%%", 100 * fraction.doubleValue()));
 			}
-			
+			System.out.println(String.format("Computed in %.02f s", executionTimeIsMilliseconds / 1000d));
+			System.out.println();
 		} else {
 			throw new RuntimeException("Unexpected number of arguments");
 		}
