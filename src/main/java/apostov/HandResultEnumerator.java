@@ -71,6 +71,8 @@ public class HandResultEnumerator {
 			overallSuccessChanceByHand = pool.submit(successChanceComputationTask).get();
 		} catch (final InterruptedException | ExecutionException e) {
 			throw new RuntimeException(e);
+		} finally {
+			pool.shutdown();
 		}
 		
 		/* In the case where one or several candidates never win, we still want them to
