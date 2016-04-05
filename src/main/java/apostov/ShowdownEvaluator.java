@@ -14,11 +14,11 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Table;
+import com.google.common.collect.Tables;
 
 import apostov.strength.PokerHandComparator;
 import apostov.strength.ranking.FlushRanking;
@@ -63,7 +63,7 @@ public class ShowdownEvaluator {
 	public PokerHandRanking selectBestCombination(final ImmutableCollection<Card> cards) {
 		assert cards.size() >= 5;
 		
-		final ImmutableTable<Value, Suit, Card> table = buildDoubleEntryTable(cards);
+		final Table<Value, Suit, Card> table = buildDoubleEntryTable(cards);
 		
 		/* Search for Straight-Flushes
 		 * This works by assuming that there can not be two straight-flushes
@@ -93,7 +93,7 @@ public class ShowdownEvaluator {
 		/* Search for full-houses */
 		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
 			final Value possibleSetValue = Value.values()[i];
-			final ImmutableMap<Suit, Card> cardsForSetMappedBySuit = table.row(possibleSetValue);
+			final Map<Suit, Card> cardsForSetMappedBySuit = table.row(possibleSetValue);
 			assert cardsForSetMappedBySuit.size() < 4;
 			if (cardsForSetMappedBySuit.size() < 3)
 				continue;
@@ -104,7 +104,7 @@ public class ShowdownEvaluator {
 				if (possibleSetValue == possiblePairValue)
 					continue;
 				
-				final ImmutableMap<Suit, Card> cardsForPairMappedBySuit = table.row(possiblePairValue);
+				final Map<Suit, Card> cardsForPairMappedBySuit = table.row(possiblePairValue);
 				final Set<Suit> suitsForPossiblePairValue = cardsForPairMappedBySuit.keySet();
 				
 				/* This assert cannot reliably check that size of potential-pair cards is strictly smaller
@@ -131,7 +131,7 @@ public class ShowdownEvaluator {
 		 * This works by assuming that there can not be two flushes
 		 * in different suits, which is true for Texas Holdem. */
 		for (final Suit suit : Suit.values()) {
-			final ImmutableMap<Value, Card> cardsByValue = table.column(suit);
+			final Map<Value, Card> cardsByValue = table.column(suit);
 			final Set<Value> valuesForThisSuit = cardsByValue.keySet();
 			if (valuesForThisSuit.size() < 5)
 				continue;
@@ -207,7 +207,7 @@ public class ShowdownEvaluator {
 		/* Search for Two-Pairs and Pairs */
 		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
 			final Value possibleHighPairValue = Value.values()[i];
-			final ImmutableMap<Suit, Card> highPairCardsBySuit = table.row(possibleHighPairValue);
+			final Map<Suit, Card> highPairCardsBySuit = table.row(possibleHighPairValue);
 			if (highPairCardsBySuit.size() < 2)
 				continue;
 			assert highPairCardsBySuit.size() == 2;
@@ -222,7 +222,7 @@ public class ShowdownEvaluator {
 
 			for (int j = i - 1; TWO.ordinal() <= j; --j) {
 				final Value possibleLowPairValue = Value.values()[j];
-				final ImmutableMap<Suit, Card> lowPairCardsBySuit = table.row(possibleLowPairValue);
+				final Map<Suit, Card> lowPairCardsBySuit = table.row(possibleLowPairValue);
 
 				if (lowPairCardsBySuit.size() < 2)
 					continue;
@@ -272,7 +272,7 @@ public class ShowdownEvaluator {
 		final List<Card> bestCards = new ArrayList<>(5);
 		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
 			final Value value = Value.values()[i];
-			final ImmutableMap<Suit, Card> cardsBySuit = table.row(value);
+			final Map<Suit, Card> cardsBySuit = table.row(value);
 			if (cardsBySuit.isEmpty())
 				continue;
 			
@@ -291,16 +291,18 @@ public class ShowdownEvaluator {
 				bestCards.get(4));
 	}
 
-	private ImmutableTable<Value, Suit, Card> buildDoubleEntryTable(final ImmutableCollection<Card> cards) {
-		final ImmutableTable.Builder<Value, Suit, Card> builder = ImmutableTable.builder();
+	private Table<Value, Suit, Card> buildDoubleEntryTable(final ImmutableCollection<Card> cards) {
+		final Table<Value, Suit, Card> table = Tables.newCustomTable(
+				Maps.newEnumMap(Value.class),
+				() -> Maps.newEnumMap(Suit.class));
 		for (final Card card : cards) {
-			builder.put(card.value, card.suit, card);
+			table.put(card.value, card.suit, card);
 		}
-		return builder.build();
+		return Tables.unmodifiableTable(table);
 	}
 
 	private Card findKicker(
-			final ImmutableTable<Value, Suit, Card> table,
+			final Table<Value, Suit, Card> table,
 			final ImmutableSet<Value> excludedValues)
 	{
 		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
@@ -308,7 +310,7 @@ public class ShowdownEvaluator {
 			if (excludedValues.contains(possibleKickerValue))
 				continue;
 			
-			final ImmutableMap<Suit, Card> row = table.row(possibleKickerValue);
+			final Map<Suit, Card> row = table.row(possibleKickerValue);
 			if (row.size() > 0)
 				return Iterables.get(row.values(), 0);
 		}
