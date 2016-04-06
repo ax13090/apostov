@@ -55,9 +55,8 @@ public class CommandLineInterpreter {
 				}
 				System.out.println(builder);
 			}
-			for (final Map.Entry<HolecardHand, Fraction> entry : winsByHand.entrySet()) {
-				final HolecardHand hand = entry.getKey();
-				final Fraction fraction = entry.getValue();
+			for (final HolecardHand hand : competingHands) {
+				final Fraction fraction = winsByHand.get(hand);
 				
 				System.out.println(hand + "\t" + String.format("%.02f%%", 100 * fraction.doubleValue()));
 			}
