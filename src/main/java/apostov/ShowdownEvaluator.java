@@ -299,8 +299,7 @@ public class ShowdownEvaluator {
 			final Table<Value, Suit, Card> table,
 			final ImmutableSet<Value> excludedValues)
 	{
-		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
-			final Value possibleKickerValue = Value.values()[i];
+		for (final Value possibleKickerValue : Value.asDescendingList) {
 			if (excludedValues.contains(possibleKickerValue))
 				continue;
 			
