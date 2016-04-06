@@ -120,7 +120,7 @@ public class HandResultEnumeratorTest {
 	private Map<HolecardHand, Fraction> computePercentages(final HolecardHand h1, final HolecardHand h2) {
 		final Map<HolecardHand, Fraction> result = new HandResultEnumerator().enumerateBoardsAndMeasureWins(ImmutableList.of(h1, h2));
 		final Fraction sum = result.values().stream().reduce((x,y) -> x.add(y)).get();
-		assertEquals(1, sum.intValue());
+		assertEquals(Fraction.ONE, sum);
 		displayResults(result);
 		return result;
 	}
