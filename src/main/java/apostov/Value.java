@@ -30,7 +30,7 @@ public enum Value {
 	
 	public final char shortName;
 	public static final ImmutableList<Value> asAscendingList = ImmutableList.copyOf(values());
-	public static final ImmutableList<Value> asDescendingList = ImmutableList.copyOf(values()).reverse();
+	public static final ImmutableList<Value> asDescendingList = ImmutableList.copyOf(asAscendingList.reverse());
 	public static final ImmutableMap<Character, Value> byShortName = ImmutableMap.copyOf(
 			asAscendingList
 			.stream()
