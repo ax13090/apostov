@@ -24,7 +24,7 @@ import com.google.common.collect.Maps;
 public class HandResultEnumeratorTest {
 
 	@Test
-	public void test01() {
+	public void acesVersusTrashPreflop() {
 		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
 		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
@@ -34,7 +34,7 @@ public class HandResultEnumeratorTest {
 	}
 
 	@Test
-	public void test02() {
+	public void aceTenVersusQueenTenPreflop() {
 		final HolecardHand aceTen = new HolecardHand(new Card(ACE, CLUBS), new Card(TEN, SPADES));
 		final HolecardHand queenTen = new HolecardHand(new Card(QUEEN, DIAMONDS), new Card(TEN, HEARTS));
 		
@@ -44,7 +44,7 @@ public class HandResultEnumeratorTest {
 	}
 	
 	@Test
-	public void test03() {
+	public void acesVersusTrashOnLuckySetBoard() {
 		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
 		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
@@ -59,7 +59,7 @@ public class HandResultEnumeratorTest {
 	}
 	
 	@Test
-	public void test04() {
+	public void acesVersusTrashOnLuckyQuadBoard() {
 		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
 		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
@@ -74,7 +74,7 @@ public class HandResultEnumeratorTest {
 	}
 	
 	@Test
-	public void test05() {
+	public void acesVersusTrashShowdown() {
 		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
 		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
@@ -96,7 +96,7 @@ public class HandResultEnumeratorTest {
 	}
 	
 	@Test
-	public void test06() {
+	public void acesVersusTrashBadBeatShowdown() {
 		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
 		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
