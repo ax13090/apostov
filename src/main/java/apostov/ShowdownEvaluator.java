@@ -81,8 +81,7 @@ public class ShowdownEvaluator {
 		}
 		
 		/* Search for quads */
-		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
-			final Value value = Value.values()[i];
+		for (final Value value : Value.asDescendingList) {
 			final Set<Suit> suitsForCurrentValue = table.row(value).keySet();
 			if (suitsForCurrentValue.size() == 4) {
 				final Card kicker = findKicker(table, ImmutableSet.of(value));
@@ -91,16 +90,14 @@ public class ShowdownEvaluator {
 		}
 		
 		/* Search for full-houses */
-		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
-			final Value possibleSetValue = Value.values()[i];
+		for (final Value possibleSetValue : Value.asDescendingList) {
 			final Map<Suit, Card> cardsForSetMappedBySuit = table.row(possibleSetValue);
 			assert cardsForSetMappedBySuit.size() < 4;
 			if (cardsForSetMappedBySuit.size() < 3)
 				continue;
 
 			assert cardsForSetMappedBySuit.size() == 3;
-			for (int j = ACE.ordinal(); TWO.ordinal() <= j; --j) {
-				final Value possiblePairValue = Value.values()[j];
+			for (final Value possiblePairValue : Value.asDescendingList) {
 				if (possibleSetValue == possiblePairValue)
 					continue;
 				
@@ -137,8 +134,7 @@ public class ShowdownEvaluator {
 				continue;
 			
 			final ImmutableList<Value> descendingFlushValues = copyOf(
-					copyOf(Value.values())
-					.reverse()
+					Value.asDescendingList
 					.stream()
 					.filter(v -> valuesForThisSuit.contains(v))
 					.limit(5)
@@ -182,8 +178,7 @@ public class ShowdownEvaluator {
 		}
 			
 		/* Search for Sets */
-		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
-			final Value possibleSetValue = Value.values()[i];
+		for (final Value possibleSetValue : Value.asDescendingList) {
 			final Set<Suit> suitsForPossibleSetValue = table.row(possibleSetValue).keySet();
 			assert suitsForPossibleSetValue.size() < 4;
 			if (suitsForPossibleSetValue.size() < 3)
@@ -270,8 +265,7 @@ public class ShowdownEvaluator {
 		
 		/* Finally, build a ranking for high-card hands */
 		final List<Card> bestCards = new ArrayList<>(5);
-		for (int i = ACE.ordinal(); TWO.ordinal() <= i; --i) {
-			final Value value = Value.values()[i];
+		for (final Value value : Value.asDescendingList) {
 			final Map<Suit, Card> cardsBySuit = table.row(value);
 			if (cardsBySuit.isEmpty())
 				continue;
