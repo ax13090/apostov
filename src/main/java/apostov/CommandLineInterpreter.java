@@ -13,7 +13,7 @@ public class CommandLineInterpreter {
 
 	public static final String BOARD_ARG_NAME = "--board";
 
-	public void interpretArguments(final String[] arguments) {
+	public void interpretArguments(final String[] arguments) throws InvalidArgumentsException {
 		if (arguments.length >= 2) {
 			
 			final ImmutableList<HolecardHand> competingHands;
@@ -63,7 +63,7 @@ public class CommandLineInterpreter {
 			System.out.println(String.format("Computed in %.02f s", executionTimeIsMilliseconds / 1000d));
 			System.out.println();
 		} else {
-			throw new RuntimeException("Unexpected number of arguments");
+			throw new InvalidArgumentsException("Unexpected number of arguments");
 		}
 	}
 	
