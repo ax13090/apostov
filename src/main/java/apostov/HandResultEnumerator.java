@@ -8,6 +8,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -78,14 +79,23 @@ public class HandResultEnumerator {
 			pool.shutdown();
 		}
 		
-		/* In the case where one or several candidates never win, we still want them to
-		 * have a Fraction representing their odds of winnings (i.e. Fraction.ZERO)
-		 * instead of null */
-		for (final HolecardHand candidate : candidates)
-			if (overallSuccessChanceByHand.containsKey(candidate) == false)
-				overallSuccessChanceByHand.put(candidate, Fraction.ZERO);
+		/* Build an ImmutableMap with the results. This map respects the order of the candidates
+		 * given as a function argument. */
+		final ImmutableMap.Builder<HolecardHand, Fraction> builder = ImmutableMap.builder();
+		for (final HolecardHand candidate : candidates) {
+			final Fraction value;
+			if (overallSuccessChanceByHand.containsKey(candidate))
+				value = overallSuccessChanceByHand.get(candidate);
+			 else
+				 /* In the case where one or several candidates never win, we still want them to
+				  * have a Fraction representing their odds of winnings (i.e. Fraction.ZERO)
+				  * instead of null */
+				value = Fraction.ZERO;
+			
+			builder.put(candidate, value);
+		}
 		
-		return ImmutableMap.copyOf(overallSuccessChanceByHand);
+		return builder.build();
 	}
 	
 }
