@@ -58,7 +58,7 @@ public class CommandLineInterpreter {
 			for (final HolecardHand hand : competingHands) {
 				final Fraction fraction = winsByHand.get(hand);
 				
-				System.out.println(hand + "\t" + String.format("%.02f%%", 100 * fraction.doubleValue()));
+				System.out.println(hand + "\t" + String.format("%.02f%%", fraction.percentageValue()));
 			}
 			System.out.println(String.format("Computed in %.02f s", executionTimeIsMilliseconds / 1000d));
 			System.out.println();

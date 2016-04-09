@@ -126,7 +126,7 @@ public class HandResultEnumeratorTest {
 	}
 
 	private void displayResults(final Map<HolecardHand, Fraction> result) {
-		System.out.println(Maps.transformValues(result, f -> String.format("%.02f%%", 100 * f.doubleValue())));
+		System.out.println(Maps.transformValues(result, f -> String.format("%.02f%%", f.percentageValue())));
 	}
 	
 }
