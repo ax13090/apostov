@@ -105,7 +105,7 @@ public class CommandLineInterpreter {
 			final ImmutableList.Builder<Card> builder = ImmutableList.builder();
 			for (int i = 0; i < stringLength; i += 2) {
 				final char valueCharacter = representation.charAt(i);
-				final char suitCharacter = representation.charAt(i +1);
+				final char suitCharacter = representation.charAt(i + 1);
 				final Card currentBoardCard = cardFromTwoLetterRepresentation(valueCharacter, suitCharacter);
 				builder.add(currentBoardCard);
 			}
