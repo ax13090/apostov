@@ -2,13 +2,11 @@ package apostov;
 
 import static com.google.common.collect.Iterators.concat;
 import static com.google.common.collect.Maps.toMap;
-import static java.lang.Math.toIntExact;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -20,7 +18,6 @@ import java.util.stream.StreamSupport;
 
 import org.apache.commons.math3.fraction.Fraction;
 import org.apache.commons.math3.util.Combinations;
-import org.apache.commons.math3.util.CombinatoricsUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -48,7 +45,6 @@ public class HandResultEnumerator {
 		
 		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
 		final int numberOfUnknownCards = 5 - partialBoard.size();
-		final long numberOfTestedBoardsAsLong = CombinatoricsUtils.binomialCoefficient(deck.size(), numberOfUnknownCards);
 		
 		final ForkJoinPool pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
 		final Callable<? extends Map<HolecardHand, Fraction>> successChanceComputationTask = 
@@ -61,7 +57,7 @@ public class HandResultEnumerator {
 						return Board.from(fullBoard);
 					})
 					.map(b -> evaluator.evaluateShowdown(candidates, b))
-					.map(winningCandidates -> toMap(winningCandidates, c -> new Fraction(1, toIntExact(numberOfTestedBoardsAsLong * winningCandidates.size()))))
+					.map(winningCandidates -> toMap(winningCandidates, c -> new Fraction(1, winningCandidates.size())))
 					.map(Map::entrySet)
 					.flatMap(Collection::stream)
 					.collect(Collectors.toConcurrentMap(
@@ -70,29 +66,40 @@ public class HandResultEnumerator {
 							(x, y) -> x.add(y)));
 			};
 		
-		final Map<HolecardHand, Fraction> overallSuccessChanceByHand;
+		final Map<HolecardHand, Fraction> unweighedSuccessChanceByHand;
 		try {
-			overallSuccessChanceByHand = pool.submit(successChanceComputationTask).get();
+			unweighedSuccessChanceByHand = pool.submit(successChanceComputationTask).get();
 		} catch (final InterruptedException | ExecutionException e) {
 			throw new RuntimeException(e);
 		} finally {
 			pool.shutdown();
 		}
+
+		final Fraction denominatorAsFraction = 
+				unweighedSuccessChanceByHand
+				.values()
+				.stream()
+				.reduce((x, y) -> x.add(y))
+				.get();
+		if (1 != denominatorAsFraction.getDenominator())
+			throw new RuntimeException();
+
 		
 		/* Build an ImmutableMap with the results. This map respects the order of the candidates
 		 * given as a function argument. */
 		final ImmutableMap.Builder<HolecardHand, Fraction> builder = ImmutableMap.builder();
 		for (final HolecardHand candidate : candidates) {
-			final Fraction value;
-			if (overallSuccessChanceByHand.containsKey(candidate))
-				value = overallSuccessChanceByHand.get(candidate);
-			 else
+			final Fraction weighedHandSuccessChance;
+			if (unweighedSuccessChanceByHand.containsKey(candidate)) {
+				final Fraction unweighedHandSuccessChance = unweighedSuccessChanceByHand.get(candidate);
+				weighedHandSuccessChance = unweighedHandSuccessChance.divide(denominatorAsFraction);
+			} else
 				 /* In the case where one or several candidates never win, we still want them to
 				  * have a Fraction representing their odds of winnings (i.e. Fraction.ZERO)
 				  * instead of null */
-				value = Fraction.ZERO;
+				weighedHandSuccessChance = Fraction.ZERO;
 			
-			builder.put(candidate, value);
+			builder.put(candidate, weighedHandSuccessChance);
 		}
 		
 		return builder.build();
