@@ -1,13 +1,8 @@
 package apostov;
 
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 
 import jline.console.ConsoleReader;
-import jline.console.completer.FileNameCompleter;
 import jline.console.completer.StringsCompleter;
 
 public class JLineMain {

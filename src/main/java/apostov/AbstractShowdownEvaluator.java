@@ -3,7 +3,6 @@ package apostov;
 import static apostov.Value.ACE;
 import static apostov.Value.TWO;
 import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Iterables.concat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,16 +31,19 @@ import apostov.strength.ranking.StraightFlushRanking;
 import apostov.strength.ranking.StraightRanking;
 import apostov.strength.ranking.TwoPairsRanking;
 
-public class ShowdownEvaluator {
+public abstract class AbstractShowdownEvaluator<T extends AbstractHolecardHand> {
 
-	public ImmutableSet<HolecardHand> evaluateShowdown(final ImmutableList<HolecardHand> candidates, final Board board) {
+	/**
+	 * @return the winning hand(s) for this showdown
+	 */
+	public ImmutableSet<T> evaluateShowdown(final ImmutableList<T> candidates, final Board board) {
 		final PokerHandComparator pokerHandComparator = new PokerHandComparator();
-		final Map<HolecardHand, PokerHandRanking> strengths = Maps.toMap(
+		final Map<T, PokerHandRanking> strengths = Maps.toMap(
 				candidates,
-				c -> selectBestCombination(copyOf(concat(c.getHolecardsAsList(), board.getBoardCardList()))));
+				c -> computeSingleHandStrength(c, board));
 		
-		final List<HolecardHand> winners = new ArrayList<>();
-		for (final HolecardHand holecards : candidates) {
+		final List<T> winners = new ArrayList<>();
+		for (final T holecards : candidates) {
 			final PokerHandRanking currentHandRanking = strengths.get(holecards);
 			if (winners.isEmpty()) {
 				winners.add(holecards);
@@ -59,8 +61,7 @@ public class ShowdownEvaluator {
 		}
 		return ImmutableSet.copyOf(winners);
 	}
-	
-	public PokerHandRanking selectBestCombination(final ImmutableCollection<Card> cards) {
+	public PokerHandRanking selectBestCombinationFromAllCards(final ImmutableCollection<Card> cards) {
 		assert cards.size() >= 5;
 		
 		final Table<Value, Suit, Card> table = buildDoubleEntryTable(cards);
@@ -95,7 +96,7 @@ public class ShowdownEvaluator {
 			assert cardsForSetMappedBySuit.size() < 4;
 			if (cardsForSetMappedBySuit.size() < 3)
 				continue;
-
+	
 			assert cardsForSetMappedBySuit.size() == 3;
 			for (final Value possiblePairValue : Value.asDescendingList) {
 				if (possibleSetValue == possiblePairValue)
@@ -206,7 +207,7 @@ public class ShowdownEvaluator {
 			if (highPairCardsBySuit.size() < 2)
 				continue;
 			assert highPairCardsBySuit.size() == 2;
-
+	
 			final Card firstCardOfHighestPair, secondCardOfHighestPair;
 			{
 				final Iterator<Card> highPairCards = highPairCardsBySuit.values().iterator();
@@ -214,11 +215,11 @@ public class ShowdownEvaluator {
 				secondCardOfHighestPair = highPairCards.next();
 				assert !highPairCards.hasNext();
 			}
-
+	
 			for (int j = i - 1; TWO.ordinal() <= j; --j) {
 				final Value possibleLowPairValue = Value.values()[j];
 				final Map<Suit, Card> lowPairCardsBySuit = table.row(possibleLowPairValue);
-
+	
 				if (lowPairCardsBySuit.size() < 2)
 					continue;
 				assert lowPairCardsBySuit.size() == 2;
@@ -241,7 +242,7 @@ public class ShowdownEvaluator {
 						secondCardOfLowestPair,
 						kicker);
 			}
-
+	
 			final Card firstKicker = findKicker(
 					table,
 					ImmutableSet.of(possibleHighPairValue));
@@ -253,7 +254,7 @@ public class ShowdownEvaluator {
 			final Card thirdKicker = findKicker(
 					table,
 					ImmutableSet.of(possibleHighPairValue, firstKicker.value, secondKicker.value));
-
+	
 			return new PairRanking(
 					possibleHighPairValue,
 					firstCardOfHighestPair.suit,
@@ -285,7 +286,9 @@ public class ShowdownEvaluator {
 				bestCards.get(4));
 	}
 
-	private Table<Value, Suit, Card> buildDoubleEntryTable(final ImmutableCollection<Card> cards) {
+	protected abstract PokerHandRanking computeSingleHandStrength(T c, Board board);
+	
+	protected Table<Value, Suit, Card> buildDoubleEntryTable(final ImmutableCollection<Card> cards) {
 		final Table<Value, Suit, Card> table = Tables.newCustomTable(
 				Maps.newEnumMap(Value.class),
 				() -> Maps.newEnumMap(Suit.class));
@@ -295,10 +298,7 @@ public class ShowdownEvaluator {
 		return Tables.unmodifiableTable(table);
 	}
 
-	private Card findKicker(
-			final Table<Value, Suit, Card> table,
-			final ImmutableSet<Value> excludedValues)
-	{
+	protected Card findKicker(final Table<Value, Suit, Card> table, final ImmutableSet<Value> excludedValues) {
 		for (final Value possibleKickerValue : Value.asDescendingList) {
 			if (excludedValues.contains(possibleKickerValue))
 				continue;
@@ -311,7 +311,7 @@ public class ShowdownEvaluator {
 		throw new RuntimeException("Failed to find a kicker");
 	}
 
-	private Optional<Value> searchFiveConsecutiveValues(final Set<Value> values) {
+	protected Optional<Value> searchFiveConsecutiveValues(final Set<Value> values) {
 		/* There can be no straight if the cards take only four values or less.
 		 * This is nonetheless a possible case, when the cards are three pairs
 		 * and a single value. In this case no hand better than a straight is found,
@@ -335,8 +335,9 @@ public class ShowdownEvaluator {
 		if (consecutiveCardsCount == 4)
 			if (values.contains(ACE))
 				return Optional.of(Value.FIVE);
-
+	
 		
 		return Optional.empty();
-	}
+	} 
+	
 }

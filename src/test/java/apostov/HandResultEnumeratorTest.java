@@ -25,32 +25,32 @@ public class HandResultEnumeratorTest {
 
 	@Test
 	public void acesVersusTrashPreflop() {
-		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
-		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		final HoldemHolecardHand aces = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HoldemHolecardHand trash = new HoldemHolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
-		final Map<HolecardHand, Fraction> percentages = computePercentages(aces, trash);
+		final Map<HoldemHolecardHand, Fraction> percentages = computePercentages(aces, trash);
 		assertTrue(percentages.get(aces).doubleValue() > 0.8);
 		assertTrue(percentages.get(trash).doubleValue() < 0.2);
 	}
 
 	@Test
 	public void aceTenVersusQueenTenPreflop() {
-		final HolecardHand aceTen = new HolecardHand(new Card(ACE, CLUBS), new Card(TEN, SPADES));
-		final HolecardHand queenTen = new HolecardHand(new Card(QUEEN, DIAMONDS), new Card(TEN, HEARTS));
+		final HoldemHolecardHand aceTen = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(TEN, SPADES));
+		final HoldemHolecardHand queenTen = new HoldemHolecardHand(new Card(QUEEN, DIAMONDS), new Card(TEN, HEARTS));
 		
-		final Map<HolecardHand, Fraction> percentages = computePercentages(aceTen, queenTen);
+		final Map<HoldemHolecardHand, Fraction> percentages = computePercentages(aceTen, queenTen);
 		assertTrue(percentages.get(aceTen).doubleValue() > 0.7);
 		assertTrue(percentages.get(queenTen).doubleValue() < 0.3);
 	}
 	
 	@Test
 	public void acesVersusTrashOnLuckySetBoard() {
-		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
-		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		final HoldemHolecardHand aces = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HoldemHolecardHand trash = new HoldemHolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
 		final ImmutableList<Card> board = ImmutableList.of(new Card(TWO, DIAMONDS), new Card(TWO, SPADES), new Card(TEN, HEARTS));
 		
-		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+		final Map<HoldemHolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
 				ImmutableList.of(aces, trash),
 				board);
 		System.out.println("Board: " + board);
@@ -60,12 +60,12 @@ public class HandResultEnumeratorTest {
 	
 	@Test
 	public void acesVersusTrashOnLuckyQuadBoard() {
-		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
-		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		final HoldemHolecardHand aces = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HoldemHolecardHand trash = new HoldemHolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
 		final ImmutableList<Card> board = ImmutableList.of(new Card(TWO, DIAMONDS), new Card(TWO, SPADES), new Card(TWO, HEARTS));
 		
-		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+		final Map<HoldemHolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
 				ImmutableList.of(aces, trash),
 				board);
 		System.out.println("Board: " + board);
@@ -75,8 +75,8 @@ public class HandResultEnumeratorTest {
 	
 	@Test
 	public void acesVersusTrashShowdown() {
-		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
-		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		final HoldemHolecardHand aces = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HoldemHolecardHand trash = new HoldemHolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
 		final ImmutableList<Card> board = ImmutableList.of(
 				new Card(TWO, DIAMONDS),
@@ -86,7 +86,7 @@ public class HandResultEnumeratorTest {
 				new Card(ACE, HEARTS)
 		);
 		
-		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+		final Map<HoldemHolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
 				ImmutableList.of(aces, trash),
 				board);
 		System.out.println("Board: " + board);
@@ -97,8 +97,8 @@ public class HandResultEnumeratorTest {
 	
 	@Test
 	public void acesVersusTrashBadBeatShowdown() {
-		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
-		final HolecardHand trash = new HolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
+		final HoldemHolecardHand aces = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HoldemHolecardHand trash = new HoldemHolecardHand(new Card(TWO, CLUBS), new Card(SEVEN, SPADES));
 		
 		final ImmutableList<Card> board = ImmutableList.of(
 				new Card(TWO, DIAMONDS),
@@ -108,7 +108,7 @@ public class HandResultEnumeratorTest {
 				new Card(KING, HEARTS)
 		);
 		
-		final Map<HolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
+		final Map<HoldemHolecardHand, Fraction> percentages = new HandResultEnumerator().enumerateBoardsAndMeasureWins(
 				ImmutableList.of(aces, trash),
 				board);
 		System.out.println("Board: " + board);
@@ -117,15 +117,15 @@ public class HandResultEnumeratorTest {
 		assertTrue(percentages.get(trash).equals(Fraction.ONE));
 	}
 
-	private Map<HolecardHand, Fraction> computePercentages(final HolecardHand h1, final HolecardHand h2) {
-		final Map<HolecardHand, Fraction> result = new HandResultEnumerator().enumerateBoardsAndMeasureWins(ImmutableList.of(h1, h2));
+	private Map<HoldemHolecardHand, Fraction> computePercentages(final HoldemHolecardHand h1, final HoldemHolecardHand h2) {
+		final Map<HoldemHolecardHand, Fraction> result = new HandResultEnumerator().enumerateBoardsAndMeasureWins(ImmutableList.of(h1, h2));
 		final Fraction sum = result.values().stream().reduce((x,y) -> x.add(y)).get();
 		assertEquals(Fraction.ONE, sum);
 		displayResults(result);
 		return result;
 	}
 
-	private void displayResults(final Map<HolecardHand, Fraction> result) {
+	private void displayResults(final Map<HoldemHolecardHand, Fraction> result) {
 		System.out.println(Maps.transformValues(result, f -> String.format("%.02f%%", f.percentageValue())));
 	}
 	

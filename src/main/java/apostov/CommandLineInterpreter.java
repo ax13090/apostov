@@ -12,15 +12,20 @@ import com.google.common.collect.Iterators;
 public class CommandLineInterpreter {
 
 	public static final String BOARD_ARG_NAME = "--board";
+	
+	private enum PokerMode {
+		TEXAS_HOLDEM, OMAHA
+	}
 
 	public void interpretArguments(final String[] arguments) throws InvalidArgumentsException {
 		if (arguments.length >= 2) {
 			
-			final ImmutableList<HolecardHand> competingHands;
+			final ImmutableList<HoldemHolecardHand> competingHands;
 			ImmutableList<Card> board = null;
+			PokerMode pokerMode = null;
 			
 			{
-				final ImmutableList.Builder<HolecardHand> builder = ImmutableList.builder();
+				final ImmutableList.Builder<HoldemHolecardHand> builder = ImmutableList.builder();
 				final Iterator<String> argIterator = Iterators.forArray(arguments);
 				while (argIterator.hasNext()) {
 					final String argument = argIterator.next();
@@ -43,7 +48,7 @@ public class CommandLineInterpreter {
 			}
 			
 			final long beginTime = System.nanoTime();
-			final Map<HolecardHand, Fraction> winsByHand = new HandResultEnumerator().enumerateBoardsAndMeasureWins(competingHands, board);
+			final Map<HoldemHolecardHand, Fraction> winsByHand = new HandResultEnumerator().enumerateBoardsAndMeasureWins(competingHands, board);
 			final long endTime = System.nanoTime();
 			final long executionTimeIsMilliseconds = (endTime - beginTime) / ArithmeticUtils.pow(1000, 2);
 			
@@ -55,7 +60,7 @@ public class CommandLineInterpreter {
 				}
 				System.out.println(builder);
 			}
-			for (final HolecardHand hand : competingHands) {
+			for (final AbstractHolecardHand hand : competingHands) {
 				final Fraction fraction = winsByHand.get(hand);
 				
 				System.out.println(hand + "\t" + String.format("%.02f%%", fraction.percentageValue()));
@@ -67,14 +72,14 @@ public class CommandLineInterpreter {
 		}
 	}
 	
-	private HolecardHand holecardHandFromFourCharacters(final String representation) {
+	private HoldemHolecardHand holecardHandFromFourCharacters(final String representation) {
 		if (representation.length() != 4)
 			throw new RuntimeException(representation + " is not a valid hand");
 
 		final Card c1 = cardFromTwoLetterRepresentation(representation.substring(0, 2));
 		final Card c2 = cardFromTwoLetterRepresentation(representation.substring(2, 4));
 		
-		return new HolecardHand(c1, c2);
+		return new HoldemHolecardHand(c1, c2);
 	}
 	
 	private Card cardFromTwoLetterRepresentation(final String representation) {

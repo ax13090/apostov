@@ -51,8 +51,8 @@ public class ShowdownEvaluatorTest {
 
 	@Test
 	public void evaluateShowdownAcesVersusKings() {
-		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
-		final HolecardHand kings = new HolecardHand(new Card(KING, CLUBS), new Card(KING, SPADES));
+		final HoldemHolecardHand aces = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HoldemHolecardHand kings = new HoldemHolecardHand(new Card(KING, CLUBS), new Card(KING, SPADES));
 		
 		final Board boardWithKing = new Board(
 				new Card(FIVE, SPADES),
@@ -61,7 +61,7 @@ public class ShowdownEvaluatorTest {
 				new Card(NINE, CLUBS),
 				new Card(TEN, DIAMONDS));
 		
-		final ImmutableSet<HolecardHand> winners = new ShowdownEvaluator().evaluateShowdown(
+		final ImmutableSet<HoldemHolecardHand> winners = new HoldemShowdownEvaluator().evaluateShowdown(
 				ImmutableList.of(aces, kings),
 				boardWithKing);
 		
@@ -70,8 +70,8 @@ public class ShowdownEvaluatorTest {
 
 	@Test
 	public void evaluateShowdownAcesVersusLuckyKings() {
-		final HolecardHand aces = new HolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
-		final HolecardHand kings = new HolecardHand(new Card(KING, CLUBS), new Card(KING, SPADES));
+		final HoldemHolecardHand aces = new HoldemHolecardHand(new Card(ACE, CLUBS), new Card(ACE, SPADES));
+		final HoldemHolecardHand kings = new HoldemHolecardHand(new Card(KING, CLUBS), new Card(KING, SPADES));
 		
 		final Board boardWithKing = new Board(
 				new Card(FIVE, SPADES),
@@ -80,7 +80,7 @@ public class ShowdownEvaluatorTest {
 				new Card(NINE, CLUBS),
 				new Card(TEN, DIAMONDS));
 		
-		final ImmutableSet<HolecardHand> winners = new ShowdownEvaluator().evaluateShowdown(
+		final ImmutableSet<HoldemHolecardHand> winners = new HoldemShowdownEvaluator().evaluateShowdown(
 				ImmutableList.of(aces, kings),
 				boardWithKing);
 		
@@ -89,8 +89,8 @@ public class ShowdownEvaluatorTest {
 	
 	@Test
 	public void evaluateShowdownWhenPlayingTheBoard() {
-		final HolecardHand rags1 = new HolecardHand(new Card(FOUR, HEARTS), new Card(TWO, CLUBS));
-		final HolecardHand rags2 = new HolecardHand(new Card(TWO, HEARTS), new Card(THREE, SPADES));
+		final HoldemHolecardHand rags1 = new HoldemHolecardHand(new Card(FOUR, HEARTS), new Card(TWO, CLUBS));
+		final HoldemHolecardHand rags2 = new HoldemHolecardHand(new Card(TWO, HEARTS), new Card(THREE, SPADES));
 		
 		final Board board = new Board(
 				new Card(FIVE, SPADES),
@@ -99,7 +99,7 @@ public class ShowdownEvaluatorTest {
 				new Card(NINE, CLUBS),
 				new Card(ACE, SPADES));
 		
-		final ImmutableSet<HolecardHand> winners = new ShowdownEvaluator().evaluateShowdown(
+		final ImmutableSet<HoldemHolecardHand> winners = new HoldemShowdownEvaluator().evaluateShowdown(
 				ImmutableList.of(rags1, rags2),
 				board);
 		
@@ -123,8 +123,8 @@ public class ShowdownEvaluatorTest {
 				queen,
 				six);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(PAIR, handStrength.handKind);
 		final PairRanking pairRanking = (PairRanking) handStrength;
@@ -156,8 +156,8 @@ public class ShowdownEvaluatorTest {
 				ten,
 				ace);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(HIGH_CARD, handStrength.handKind);
 		final HighCardRanking highCardRanking = (HighCardRanking) handStrength;
@@ -187,8 +187,8 @@ public class ShowdownEvaluatorTest {
 				ace,
 				new Card(EIGHT, CLUBS));
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(THREE_OF_A_KIND, handStrength.handKind);
 		final SetRanking setRanking = (SetRanking) handStrength;
@@ -216,8 +216,8 @@ public class ShowdownEvaluatorTest {
 				new Card(SEVEN, DIAMONDS),
 				new Card(EIGHT, CLUBS));
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(FOUR_OF_A_KIND, handStrength.handKind);
 		final QuadRanking quadRanking = (QuadRanking) handStrength;
@@ -243,8 +243,8 @@ public class ShowdownEvaluatorTest {
 				secondQueen,
 				secondKing);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(TWO_PAIRS, handStrength.handKind);
 		final TwoPairsRanking twoPairsRanking = (TwoPairsRanking) handStrength;
@@ -275,8 +275,8 @@ public class ShowdownEvaluatorTest {
 				new Card(FIVE, DIAMONDS),
 				new Card(SEVEN, HEARTS));
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(STRAIGHT, handStrength.handKind);
 		final StraightRanking straightRanking = (StraightRanking) handStrength;
@@ -306,8 +306,8 @@ public class ShowdownEvaluatorTest {
 				four
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(STRAIGHT, handStrength.handKind);
 		final StraightRanking straightRanking = (StraightRanking) handStrength;
@@ -337,8 +337,8 @@ public class ShowdownEvaluatorTest {
 				four
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(STRAIGHT, handStrength.handKind);
 		final StraightRanking straightRanking = (StraightRanking) handStrength;
@@ -364,8 +364,8 @@ public class ShowdownEvaluatorTest {
 				new Card(QUEEN, SPADES)
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(FLUSH, handStrength.handKind);
 		final FlushRanking flushRanking = (FlushRanking) handStrength;
@@ -392,8 +392,8 @@ public class ShowdownEvaluatorTest {
 				new Card(QUEEN, SPADES)
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(FLUSH, handStrength.handKind);
 		final FlushRanking flushRanking = (FlushRanking) handStrength;
@@ -424,8 +424,8 @@ public class ShowdownEvaluatorTest {
 				twoOfDiamonds
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(FULL_HOUSE, handStrength.handKind);
 		final FullHouseRanking fullHouseRanking = (FullHouseRanking) handStrength;
@@ -455,8 +455,8 @@ public class ShowdownEvaluatorTest {
 				new Card(FIVE, DIAMONDS),
 				new Card(SEVEN, HEARTS));
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(STRAIGHT_FLUSH, handStrength.handKind);
 		final StraightFlushRanking straightRanking = (StraightFlushRanking) handStrength;
@@ -483,8 +483,8 @@ public class ShowdownEvaluatorTest {
 				four
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 
 		assertSame(STRAIGHT_FLUSH, handStrength.handKind);
 		final StraightFlushRanking straightRanking = (StraightFlushRanking) handStrength;
@@ -511,8 +511,8 @@ public class ShowdownEvaluatorTest {
 				four
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 
 		assertSame(STRAIGHT_FLUSH, handStrength.handKind);
 		final StraightFlushRanking straightRanking = (StraightFlushRanking) handStrength;
@@ -534,8 +534,8 @@ public class ShowdownEvaluatorTest {
 				new Card(TWO, DIAMONDS)
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
-		final PokerHandRanking handStrength = evaluator.selectBestCombination(copyOf(concat(holeCards, board)));
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
+		final PokerHandRanking handStrength = evaluator.selectBestCombinationFromAllCards(copyOf(concat(holeCards, board)));
 		
 		assertSame(FULL_HOUSE, handStrength.handKind);
 		final FullHouseRanking fullHouseRanking = (FullHouseRanking) handStrength;

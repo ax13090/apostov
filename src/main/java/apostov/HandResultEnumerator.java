@@ -24,12 +24,12 @@ import com.google.common.collect.ImmutableMap;
 
 public class HandResultEnumerator {
 
-	public ImmutableMap<HolecardHand, Fraction> enumerateBoardsAndMeasureWins(final ImmutableList<HolecardHand> candidates) {
+	public ImmutableMap<HoldemHolecardHand, Fraction> enumerateBoardsAndMeasureWins(final ImmutableList<HoldemHolecardHand> candidates) {
 		return enumerateBoardsAndMeasureWins(candidates, ImmutableList.of());
 	}
 	
-	public ImmutableMap<HolecardHand, Fraction> enumerateBoardsAndMeasureWins(
-			final ImmutableList<HolecardHand> candidates,
+	public ImmutableMap<HoldemHolecardHand, Fraction> enumerateBoardsAndMeasureWins(
+			final ImmutableList<HoldemHolecardHand> candidates,
 			final ImmutableList<Card> partialBoard)
 	{
 		assert partialBoard.isEmpty() || Board.ACCEPTABLE_PARTIAL_BOARD_SIZES.contains(partialBoard.size());
@@ -37,18 +37,21 @@ public class HandResultEnumerator {
 		final ImmutableList<Card> deck = new DeckFactory().newDeck(
 				Stream.concat(
 						candidates.stream()
-							.map(HolecardHand::getHolecardsAsList)
+							.map(HoldemHolecardHand::getHolecardsAsList)
 							.flatMap(Collection::stream),
 						partialBoard.stream())
 					.collect(toSet())
 		);
 		
-		final ShowdownEvaluator evaluator = new ShowdownEvaluator();
+		final AbstractShowdownEvaluator<HoldemHolecardHand> evaluator = new HoldemShowdownEvaluator();
 		final int numberOfUnknownCards = 5 - partialBoard.size();
 		
 		final ForkJoinPool pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
-		final Callable<? extends Map<HolecardHand, Fraction>> successChanceComputationTask = 
+		final Callable<? extends Map<HoldemHolecardHand, Fraction>> successChanceComputationTask = 
 			() -> {
+				/* TODO Reduce the size of this code, by using
+				 * the new ListCombinationIterable instead of
+				 * the raw Combinations class */
 				return StreamSupport.stream(new Combinations(deck.size(), numberOfUnknownCards).spliterator(), true)
 					.map(a -> stream(a).mapToObj(i -> deck.get(i)).collect(toList()))
 					.map(pickedCards -> {
@@ -66,7 +69,7 @@ public class HandResultEnumerator {
 							(x, y) -> x.add(y)));
 			};
 		
-		final Map<HolecardHand, Fraction> unweighedSuccessChanceByHand;
+		final Map<HoldemHolecardHand, Fraction> unweighedSuccessChanceByHand;
 		try {
 			unweighedSuccessChanceByHand = pool.submit(successChanceComputationTask).get();
 		} catch (final InterruptedException | ExecutionException e) {
@@ -87,8 +90,8 @@ public class HandResultEnumerator {
 		
 		/* Build an ImmutableMap with the results. This map respects the order of the candidates
 		 * given as a function argument. */
-		final ImmutableMap.Builder<HolecardHand, Fraction> builder = ImmutableMap.builder();
-		for (final HolecardHand candidate : candidates) {
+		final ImmutableMap.Builder<HoldemHolecardHand, Fraction> builder = ImmutableMap.builder();
+		for (final HoldemHolecardHand candidate : candidates) {
 			final Fraction weighedHandSuccessChance;
 			if (unweighedSuccessChanceByHand.containsKey(candidate)) {
 				final Fraction unweighedHandSuccessChance = unweighedSuccessChanceByHand.get(candidate);
