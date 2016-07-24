@@ -6,7 +6,7 @@ This is the author's take at creating a piece of software which computes the odd
 The rest of this documentation requires basic knowledge of the game of [Texas Holdem Poker](https://en.wikipedia.org/wiki/Texas_hold_'em).
 
 The poker variant is considered to be No-Limit Texas Holdem through most of the code and documentation. A basic implementation for Omaha hand equities was added, but without command-line interface support for now. It can only be used
-through Java programming and its performance is way behing the Texas-Holdem implementation.
+through Java programming and its performance is way behind the Texas-Holdem implementation.
 
 The program takes a set of holecards as input, and computes all the possible boards. All the contesting hands will be matched against each board, which allows us to compute the odds of winning for each hand. In other words, what this program computes is the same thing as the percentages showed in poker television programmes, when the players are all-in before the flop and table (or show) their hands.
 
@@ -35,5 +35,5 @@ AcAs    25,45%
 ```
 
 ## Author and license
-This project is written by Axel de Sablet and release into the public domain for use by anyone who finds it useful. 
+This project is written by Axel de Sablet and released into the public domain for use by anyone who finds it useful. 
 I would appreciate feedback but of course, there is no requirement for that.
