@@ -5,7 +5,8 @@ The title stands for Axel's poker stove.
 This is the author's take at creating a piece of software which computes the odds of winning of a set of opposing poker hands.
 The rest of this documentation requires basic knowledge of the game of [Texas Holdem Poker](https://en.wikipedia.org/wiki/Texas_hold_'em).
 
-The poker variant is considered to be No-Limit Texas Holdem through all the code and documentation. 
+The poker variant is considered to be No-Limit Texas Holdem through most of the code and documentation. A basic implementation for Omaha hand equities was added, but without command-line interface support for now. It can only be used
+through Java programming and its performance is way behing the Texas-Holdem implementation.
 
 The program takes a set of holecards as input, and computes all the possible boards. All the contesting hands will be matched against each board, which allows us to compute the odds of winning for each hand. In other words, what this program computes is the same thing as the percentages showed in poker television programmes, when the players are all-in before the flop and table (or show) their hands.
 

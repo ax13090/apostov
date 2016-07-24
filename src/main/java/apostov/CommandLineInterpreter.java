@@ -48,7 +48,7 @@ public class CommandLineInterpreter {
 			}
 			
 			final long beginTime = System.nanoTime();
-			final Map<HoldemHolecardHand, Fraction> winsByHand = new HandResultEnumerator().enumerateBoardsAndMeasureWins(competingHands, board);
+			final Map<HoldemHolecardHand, Fraction> winsByHand = new HoldemHandResultEnumerator().enumerateBoardsAndMeasureWins(competingHands, board);
 			final long endTime = System.nanoTime();
 			final long executionTimeIsMilliseconds = (endTime - beginTime) / ArithmeticUtils.pow(1000, 2);
 			

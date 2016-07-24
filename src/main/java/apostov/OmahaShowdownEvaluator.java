@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
 
 import apostov.collections.ListCombinationIterable;
+import apostov.strength.PokerHandComparator;
 import apostov.strength.ranking.PokerHandRanking;
 
 public class OmahaShowdownEvaluator extends AbstractShowdownEvaluator<OmahaHolecardHand> {
@@ -33,7 +33,7 @@ public class OmahaShowdownEvaluator extends AbstractShowdownEvaluator<OmahaHolec
 			}
 		}
 		
-		return Ordering.natural().max(rankingsForTwoSeparateCards);
+		return new PokerHandComparator().max(rankingsForTwoSeparateCards);
 	}
 
 }
